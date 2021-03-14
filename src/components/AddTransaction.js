@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewTransaction, listLastTransactions, getAllCategory } from '../actions/transactionActions';
 import './AddTransaction.css';
+import MessageBox from './MessageBox';
+import LoadingBox from './LoadingBox';
 
 export default function AddTransaction(props) {
 
@@ -9,6 +11,8 @@ export default function AddTransaction(props) {
   const { userInfo } = userSignin;
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;
+  const addTransaction = useSelector((state) => state.addTransaction);
+  const { loadingAdd, errorAdd, messageAdd } = addTransaction;
 
   const [organization, setOrganization] = useState('_____');
   const [date, setDate] = useState('_____');
@@ -25,8 +29,6 @@ export default function AddTransaction(props) {
     const submitHandler = (e) => {
       e.preventDefault();
       dispatch(addNewTransaction(userInfo, +summa, +wallet, +category, comment, counterparty, date));
-      dispatch(listLastTransactions(userInfo));
-      props.handleClose();
     };
 
     const getCategoryId = (e) => {
@@ -53,7 +55,11 @@ export default function AddTransaction(props) {
 
     useEffect(() => {
       dispatch(getAllCategory(userInfo));
-  }, []);
+      if(messageAdd) {
+        dispatch(listLastTransactions(userInfo));
+        props.handleClose();
+      }
+  }, [messageAdd]);
 
     return (
         <div className={showHideClassName}>
@@ -109,6 +115,9 @@ export default function AddTransaction(props) {
                 <div className="modal__form-item">
                   <input type="submit" value="Добавить" />
                 </div>
+                {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
+                <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
+                <MessageBox variant="success">{messageAdd}</MessageBox> : ''}
               </div>
             </form>
           </section>
