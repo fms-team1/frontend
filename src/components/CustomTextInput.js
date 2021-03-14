@@ -24,7 +24,7 @@ export default function CustomTextInput(props) {
                 type={props.type !== "password"
                 ? props.type
                 : isPasswordShown ? "text" : "password"}
-                name={props.type}
+                id={props.type}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 placeholder={props.placeholder}

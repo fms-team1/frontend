@@ -10,6 +10,7 @@ export default function SigninScreen(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
 
     const redirect = props.location.search
         ? props.location.search.split('=')[1]
@@ -24,8 +25,12 @@ export default function SigninScreen(props) {
         e.preventDefault();
         setSubmitted(true);
         if(email && password) {
-            dispatch(signin(email, password));
+            dispatch(signin(email, password, rememberMe));
         }
+    };
+
+    const toggleRememberMe = () => {
+        setRememberMe(!rememberMe);
     };
 
     useEffect(() => {
@@ -42,9 +47,9 @@ export default function SigninScreen(props) {
                         <img src={`${process.env.PUBLIC_URL}/web-analytics 1.svg`} alt="web-analytics"/>
                     </div>
                     <div className="signin__form">
-                        <div className="signin__form-icon">
+                        <div className="signin__icon">
                             <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="icon"/>
-                            <div className="signin__form-title">NeoFin</div>
+                            <div className="signin__icon-title">NeoFin</div>
                         </div>
                         {loading && <LoadingBox></LoadingBox>}
                         <form onSubmit={submitHandler}>
@@ -55,7 +60,7 @@ export default function SigninScreen(props) {
                                 selfState={email}
                                 labelText="Почта"
                                 isSubmitted={submitted}
-                                warningMessage="Email is required" />
+                                warningMessage="Заполните поля" />
                             <CustomTextInput
                                 type="password"
                                 placeholder="Введите пароль"
@@ -63,13 +68,13 @@ export default function SigninScreen(props) {
                                 selfState={password}
                                 labelText="Пароль"
                                 isSubmitted={submitted}
-                                warningMessage="Password is required" />
+                                warningMessage="Заполните поля" />
                             { error && error.indexOf("403") !== -1
                                 && <div className="help-block"><span>X</span> Неверный пароль или логин</div> }
-                            <div className="remember-me">
-                                <input type="checkbox"/>
-                                <div>Запомнить</div>
-                            </div>
+                           <label className="remember-me__label">Запомнить
+                              <input type="checkbox" onChange={toggleRememberMe} />
+                              <span className="checkmark"></span>
+                           </label>
                             <div className="signin__form-item">
                                 <input type="submit" value="Войти" />
                             </div>

@@ -6,7 +6,7 @@ import {
     USER_SIGNOUT
  } from "../constants/userConstants"
 
-export const signin = (email, password) => async (dispatch) => {
+export const signin = (email, password, rememberMe) => async (dispatch) => {
     dispatch({ type: USER_SIGN_REQUEST, payload: { email, password } });
     try {
         const { data } = await axios.post('https://neo-fms.herokuapp.com/login', {
@@ -17,7 +17,13 @@ export const signin = (email, password) => async (dispatch) => {
         localStorage.setItem('userToken', JSON.stringify({
             email: email,
             jwt: data.jwt
-        }))
+        }));
+        if(rememberMe) {
+            localStorage.setItem('userToken', JSON.stringify({
+                email: email,
+                jwt: data.jwt
+            }));
+        }
     } catch (error) {
         dispatch({
             type: USER_SIGN_FAIL,
