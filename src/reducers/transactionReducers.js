@@ -1,4 +1,4 @@
-import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS } from "../constants/transactionConstants";
+import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS } from "../constants/transactionConstants";
 
 export const lastListTransactionReducer = (
     state = { loading: true, transactions: [] },
@@ -44,6 +44,15 @@ export const getJournalListReducer = (
                 transactions: action.payload
             };
         case JOURNAL_LIST_FAIL:
+            return { loading: false, error: action.payload };
+        case JOURNAL_BY_SECTION_REQUEST:
+            return { loading: true };
+        case JOURNAL_BY_SECTION_SUCCESS:
+            return {
+                loading: false,
+                transactions: action.payload
+            };
+        case JOURNAL_BY_SECTION_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;
