@@ -1,38 +1,303 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
+
+/* My self normalize */
+
+* {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:focus, :active {
+  outline: none;
+}
+a:focus, a:active {
+  outline: none;
+}
+aside, nav, footer, header, section {
+  display: block; 
+}
+html, body {
+  height: 100%;
+  min-width: 320px; }
+body {
+  line-height: 1;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+input, button, textarea {
+  font-family: 'Roboto', sans-serif;
+}
+input::-ms-clear {
+  display: none;
+}
+button {
+  cursor: pointer;
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}      
+a, a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+ul li {
+  list-style: none;
+}      
+img {
+  vertical-align: top;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: inherit;
+  font-size: inherit;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* App */
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  color: black;
+  background-color: #000;
+  height: 70px;
+  padding-top: 20px;
+}
+
+.container {
+  max-width: 1440px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+.column {
+  display: flex;
+  width: 100%;
+}
+input[type=submit] {
+  margin-top: 5%;
+  background-color: #3379CA;
+  color: white;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 11px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.signout {
+  color: #fff;
+  font-size: large;
+  display: flex;
+  justify-content: center;
+}
+
+/* Register Screen */
+.register__form {
+  padding: 50px 0;
+  width: 40%;
+  margin: 0 auto;
+}
+.register__icon {
+  display: block;
+  margin: 30px auto;
+}
+.register__form form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.register__form select {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid #848181;
+  padding: 9px 20px;
+  font-size: medium;
+  border-radius: 60px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: 1em auto, 100%;
+}
+.register__form-item {
+  margin: 20px 0;
+  width: 100%;
+}
+.register__form-item:nth-child(1) {
+  width: 50%;
+}
+.register__form-item:nth-child(2) {
+  width: 40%;
+}
+
+/* Signin screen */
+.signin__block {
+  width: 50%;
+  background-color: #3379CA;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.signin__block img {
+  width: 50%;
+  height: 50%;
+}
+.signin__content {
+  height: 100vh;
+}
+.signin__form {
+  width: 40%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.signin__form-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.signin__form-icon img{
+  width: 70px;
+  height: 70px;
+}
+.remember-me input[type=checkbox] {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+.remember-me {
+  font-size: 18px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+}
+.signin__form-title {
+  font-family: Poppins;
+  font-weight: 800;
+  color: #1778E9;
+  font-size: 36px;
+  line-height: 54px;
+}
+.signin__form form {
+  width: 80%;
+}
+.signin__form-item {
+  margin: 20px auto;
+}
+.signin__forgot-pwd {
+  margin-top: 28px;
+  text-align: center;
+}
+.signin__forgot-pwd a {
+  font-size: 18px;
+  line-height: 22px;
+  color: #1778E9;
+}
+.password-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 3%;
+  top: 43px;
+}
+.help-block {
+  margin: 3% 0;
+  color: red;
+}
+.help-block span {
+  font-weight: 600;
+}
+/* CUSTOM FORM */
+.custom-form__item {
+  position: relative;
+  margin: 20px auto 10px auto;
+}
+.custom-form__item input {
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  line-height: 18px;
+  border: 1px solid #848181;
+  margin-top: 10px;
+  padding: 9px 20px;
+  border-radius: 5px;
+}
+.custom-form__item label {
+  width: fit-content;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #282626;
 }
 
-.App-link {
-  color: #61dafb;
+/* Alert */
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f8f8AD;
+}
+.loading {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  z-index: 5;
+}
+.loading i {
+  font-size: 70px;
+}
+.alert {
+  padding: 1rem;
+  border: 0.1rem solid transparent;
+  border-radius: 0.5rem;
+}
+.alert-info {
+  color: #2020a0;
+  background-color: #e0e0ff;
+}
+.alert-danger {
+  color: #a02020;
+  background-color: #ffe0e0;
+}
+.alert-success {
+  color: #20a020;
+  background-color: #eeffe0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media only screen and (max-width: 768px) {
+  .signin__block {
+    display: none;
   }
-  to {
-    transform: rotate(360deg);
+  .signin__form {
+    padding: 15% 0;
+    height: fit-content;
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .signin__form {
+    width: 95%;
   }
 }
