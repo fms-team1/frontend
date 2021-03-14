@@ -17,7 +17,7 @@ export default function JournalScreen() {
 
   useEffect(() => {
       dispatch(getJournalList(userInfo));
-}, [userInfo]);
+}, []);
 
 
   return (

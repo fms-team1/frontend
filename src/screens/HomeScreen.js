@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { listLastTransactions } from '../actions/transactionActions';
-import { signout } from '../actions/userActions';
+import { listLastTransactions, listPeriodTransactions } from '../actions/transactionActions';
 import RenderHeader from '../components/RenderHeader';
 import RenderTransaction from '../components/RenderTransaction';
 import RenderWallet from '../components/RenderWallet';
@@ -35,7 +33,18 @@ export default function HomeScreen(props) {
     };
 
     const filterByTime = (e) => {
-        console.log("gi");
+        let current = new Date;
+        let firstDay = current.getDate() - current.getDay();
+        let lastDay = firstDay - 6;
+        let currentDate = new Date(current.setDate(firstDay));
+        let lastDate = new Date(current.setDate(lastDay));
+        const period = currentDate.getFullYear()+'-'+(+currentDate.getMonth()+1)+'-'+currentDate.getDate() +
+            ' ' + lastDate.getFullYear()+'-'+(+lastDate.getMonth()+1)+'-'+lastDate.getDate();
+        if(e.target.value === 'week') {
+            dispatch(listPeriodTransactions(userInfo, period));
+        } else if (e.target.value === 'month') {
+            dispatch(listPeriodTransactions(userInfo, period));
+        }
     }
 
     useEffect(() => {
@@ -45,7 +54,8 @@ export default function HomeScreen(props) {
         else {
             dispatch(listLastTransactions(userInfo));
         }
-    }, [props.history, userInfo]);
+    }, []);
+
     return (
         <section className="home">
             <div className="home__top-block">
@@ -74,6 +84,7 @@ export default function HomeScreen(props) {
                     <div className="home__filter">
                         <div className="home__filter-icon"></div>
                         <select className="home__filter-select" onChange={(e) => filterByTime(e)}>
+                            <option value="choose">Выберите</option>
                             <option value="week">неделя</option>
                             <option value="month">месяц</option>
                             <option value="year">год</option>
