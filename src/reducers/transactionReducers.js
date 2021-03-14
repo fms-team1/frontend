@@ -90,14 +90,14 @@ export const getAllCategoryReducer = (
 export const addNewTransactionReducer = ( state = {}, action ) => {
     switch (action.type) {
         case ADD_TRANSACTION_REQUEST:
-            return { addLoading: true };
+            return { loadingAdd: true };
         case ADD_TRANSACTION_SUCCESS:
             return {
-                addLoading: false,
-                message: action.payload
+                loadingAdd: false,
+                messageAdd: action.payload
             };
         case ADD_TRANSACTION_FAIL:
-            return { addLoading: false, error: action.payload };
+            return { loadingAdd: false, errorAdd: action.payload };
         default:
             return state;
     }
