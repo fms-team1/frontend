@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getByNeoSection, getJournalList } from '../actions/transactionActions';
 import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
 import RenderHeader from '../components/RenderHeader';
 import RenderTransaction from '../components/RenderTransaction';
 
@@ -14,6 +16,34 @@ export default function JournalScreen() {
 
   const listJournal = useSelector((state) => state.listJournal);
   const { loading, error, transactions } = listJournal;
+
+  const [media, setMedia] = useState(false);
+
+    useEffect(() => {
+        let mounted = true;
+        let mountedd = true;
+        if(window.matchMedia("(max-width: 601px)").matches) {
+            if(mounted) {
+                setMedia(true);
+            }
+        }
+        else {
+            setMedia(false);
+        }
+
+        window.matchMedia("(max-width: 601px)").addEventListener("change", () => {
+            if(window.matchMedia("(max-width: 601px)").matches) {
+                if(mountedd) {
+                    setMedia(true);
+                }
+            }
+            else setMedia(false);
+            return mountedd = false;
+        });
+
+        return () => mounted = false;
+
+    }, [window.matchMedia("(max-width: 601px)").matches]);
 
   const submitHandler = (e, section) => {
     if(section === 'NEOBIS') {
@@ -34,6 +64,12 @@ export default function JournalScreen() {
 
   return (
     <section className='journal'>
+      {loading ? (
+      <LoadingBox></LoadingBox>
+      ) : error ? (
+      <MessageBox varinat="danger">{error}</MessageBox>
+      ) : (
+      <>
       <div className="journal__top-block">
         <nav className='journal__navbar'>
           <NavLink activeClassName="journal__link--active" className="journal__link" to="/journal/neobis" onClick={(e) => submitHandler(e, "NEOBIS")}>
@@ -63,7 +99,6 @@ export default function JournalScreen() {
             </svg>
           </NavLink>
         </nav>
-        {loading && <LoadingBox></LoadingBox>}
         <div className="journal__filter">
           <div className="journal__filter-item">
             <select className="journal__filter-select">
@@ -111,20 +146,13 @@ export default function JournalScreen() {
         </div>
       </div>
       <div className="transaction__block">
-          <table>
-            <thead>
-              <tr>{<RenderHeader headers={
-                ['Тип', 'Сумма', 'Организация',
-                'Категория', 'Контрагент', 'Пользователь',
-                'Кошелек', 'Дата']
-                } />}
-              </tr>
-            </thead>
-            <tbody>
-              {<RenderTransaction transactions={transactions} />}
-            </tbody>
-          </table>
-      </div>
+        {media ? 
+        (<>
+          <div className="transaction__title-block">Последние транзакции</div>
+            <RenderAdaptiveTransaction  transactions={transactions} />
+          </>) : <RenderTransaction transactions={transactions} />}
+      </div> 
+    </>)}
     </section>
   );
 }

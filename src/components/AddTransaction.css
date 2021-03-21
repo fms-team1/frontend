@@ -1,31 +1,40 @@
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 10;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
   
 .modal__main {
-    position:fixed;
-    background: white;
-    width: 80%;
-    height: 80%;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+  padding: 10% 5%;
+  position: fixed;
+  background: white;
+  width: 80%;
+  height: 80%;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
 }
-.modal__main-from {
+.modal__exit {
+  position: absolute;
+  top: 3%;
+  right: 0;
+  width: 8%;
+  height: 8%;
+  cursor: pointer;
+}
+.modal__main-form {
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
   flex-wrap: wrap;
 }
-.modal__main-from input,
-.modal__main-from select {
+.modal__main-form input,
+.modal__main-form select {
   width: 100%;
   margin: 10px 0 13px 0;
   display: block;
@@ -36,7 +45,8 @@
   line-height: 20px;
   color: #4C4C4C;
 }
-.modal__main-from input[type=submit] {
+.modal__main-form input[type=submit] {
+  width: 100%;
   color: #FFFFFF;
   font-weight: 500;
   padding: 11px 0;
@@ -45,12 +55,12 @@
   background: #1778E9;
   border: 1px solid #1778E9;
 }
-.modal__main-from label {
+.modal__main-form label {
   font-size: 18px;
   line-height: 18px;
   color: #000000;
 }
-.modal__main-from textarea {
+.modal__main-form textarea {
   width: 300px;
   margin: 10px 0 13px 0;
   display: block;
@@ -61,11 +71,52 @@
   line-height: 20px;
   color: #4C4C4C;
 }
-
 .display-block {
-    display: block;
+  display: block;
+} 
+.display-none {
+  display: none;
+}
+
+@media only screen and (max-width: 1120px) {
+  .modal__bottom-form {
+    padding: 5% 0;
   }
-  
-  .display-none {
-    display: none;
+  .modal__exit {
+    right: 3%;
   }
+  .modal__main-form {
+    height: 100%;
+  }
+  .modal__main {
+    padding: 10% 3% 20% 3%;
+    overflow: scroll;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .modal__main-form textarea {
+    max-width: 250px;
+  }
+  .modal__form-item {
+    width: 250px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .modal__main-form textarea {
+    max-width: 200px;
+  }
+  .modal__form-item {
+    margin: 0 auto;
+    width: 200px;
+  }
+  .modal__main-form input,
+  .modal__main-form select {
+    margin: 10px 0 13px 0;
+    padding: 17px 15px;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .modal__main-form label {
+    font-size: 15px;
+  }
+}

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { listLastTransactions, listPeriodTransactions } from '../actions/transactionActions';
-import RenderHeader from '../components/RenderHeader';
 import RenderTransaction from '../components/RenderTransaction';
 import RenderWallet from '../components/RenderWallet';
-import AddTransaction from '../components/AddTransaction';
+import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
+import AddIncExpTransaction from '../components/AddIncExpTransaction';
+import AddTransTransaction from '../components/AddTransTransaction';
 
 export default function HomeScreen(props) {
     const dispatch = useDispatch();
-    const [show, setShow] = useState(false);
-    const [typeTransaction, setTypeTransaction] = useState("addIncomeOrExpense");
+    const [showIncExp, setShowIncExp] = useState(false);
+    const [showTrans, setShowTrans] = useState(false);
+    const [customActive, setCustomActive] = useState(null);
     const userSignin = useSelector((state) => state.userSignin);
     const { userInfo } = userSignin;
 
@@ -19,34 +21,60 @@ export default function HomeScreen(props) {
     const { loading, error, incomesAndExpenses, walletBalance, transactions } = transactionLastList;
 
     const showModal = () => {
-        setTypeTransaction("addIncomeOrExpense");
-        setShow(true);
+      setShowIncExp(true);
     };
 
     const showTransferModal = () => {
-        setTypeTransaction("addTransfer");
-        setShow(true);
+      setShowTrans(true);
     }
 
     const hideModal = () => {
-        setShow(false);
+      setShowIncExp(false);
+      setShowTrans(false);
     };
 
-    const filterByTime = (e) => {
-        let current = new Date;
-        let firstDay = current.getDate() - current.getDay();
-        let lastDay = firstDay - 6;
-        let currentDate = new Date(current.setDate(firstDay));
-        let lastDate = new Date(current.setDate(lastDay));
-        const period = currentDate.getFullYear()+'-'+(+currentDate.getMonth()+1)+'-'+currentDate.getDate() +
-            ' ' + lastDate.getFullYear()+'-'+(+lastDate.getMonth()+1)+'-'+lastDate.getDate();
-        if(e.target.value === 'week') {
-            dispatch(listPeriodTransactions(userInfo, period));
-        } else if (e.target.value === 'month') {
-            dispatch(listPeriodTransactions(userInfo, period));
-        }
+    const converStringDate = (date) => {
+        return date.getFullYear()+'-'+(+date.getMonth()+1)+'-'+date.getDate()
     }
 
+    const filterByTime = (e) => {
+        let ourDate = new Date();
+
+        if(e.target.value === 'week' || e.target.innerText === 'Неделя') {
+            let weekDate = new Date(ourDate);
+            let pastDate = weekDate.getDate() - 7;
+            weekDate.setDate(pastDate);
+            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(weekDate)));
+        } else if (e.target.value === 'month' || e.target.innerText === 'Месяц') {
+            let date = new Date(ourDate);
+            let month = date.getMonth()-1;
+            let formatPrevMonth = new Date(date.setMonth(month));
+            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(formatPrevMonth)));
+        } else if (e.target.value === 'year' || e.target.innerText === 'Год') {
+            let date = new Date(ourDate);
+            let year = date.getFullYear()-1;
+            let formatPrevYear = new Date(date.setFullYear(year));
+            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(formatPrevYear)));
+        }
+    }
+    const [media, setMedia] = useState(false);
+
+    useEffect(() => {
+        if(window.matchMedia("(max-width: 601px)").matches) {
+            setMedia(true);
+        }
+        else {
+            setMedia(false);
+        }
+
+        window.matchMedia("(max-width: 601px)").addEventListener("change", () => {
+            if(window.matchMedia("(max-width: 601px)").matches) {
+                setMedia(true);
+            }
+            else setMedia(false);
+        });
+
+    }, [window.matchMedia("(max-width: 601px)").matches]);
     useEffect(() => {
         if (!userInfo) {
             props.history.push('/signin');
@@ -58,93 +86,98 @@ export default function HomeScreen(props) {
 
     return (
         <section className="home">
-            <div className="home__top-block">
-                {/* <div className="home__search-bar column__center">
-                    <input type="search" placeholder="Поиск" className="home__search" />
-                </div> */}
-                <div className="home__profile-bar column__center">
-                    <div className="home__profile-icon"></div>
-                    <div className="home__profile-name">Аян Кыялбекова</div>
-                </div>
-            </div>
-            <div className="home__content">
-                <div className="home__content-top column__space-around">
-                    <div className="home__cash-block">
-                        <div className="home__cash-type">Доходы</div>
-                        <div className="home__cash-amount">
-                            {incomesAndExpenses ? ('+ ' + incomesAndExpenses.income + ' с') : ''}
-                        </div>
-                    </div>
-                    <div className="home__cash-block">
-                        <div className="home__cash-type">Расходы</div>
-                        <div className="home__cash-amount">
-                            {incomesAndExpenses ? ('- ' + incomesAndExpenses.expense + ' с') : ''}
-                        </div>
-                    </div>
-                    <div className="home__filter">
-                        <div className="home__filter-icon"></div>
-                        <select className="home__filter-select" onChange={(e) => filterByTime(e)}>
-                            <option value="choose">Выберите</option>
-                            <option value="week">неделя</option>
-                            <option value="month">месяц</option>
-                            <option value="year">год</option>
-                        </select>
-                    </div>
-                </div>
-                <div className="home__content-body">
-                    <table>
-                        <thead>
-                            <tr>{<RenderHeader headers={
-                                ['Кошелек', 'Баланс']
-                            } />}</tr>
-                        </thead>
-                        <tbody>
-                            {<RenderWallet walletBalance={walletBalance} />}
-                        </tbody>
-                    </table>
-                </div>
-                {loading && <LoadingBox></LoadingBox>}
-                <div className="home__content-buttons">
-                    <AddTransaction show={show} handleClose={hideModal} typeTransaction={typeTransaction} />
-                    <button onClick={showModal} className="home__button-income">
-                        <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} />
-                        <div>Доход</div>
-                    </button>
-                    <button onClick={showModal} className="home__button-expense">
-                        <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> 
-                        <div>Расход</div>
-                    </button>
-                    <button onClick={showTransferModal} className="home__button-transfer">
-                        <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} />
-                        <div>Перевод</div>
-                    </button>
-                </div>
-            </div>
-            <div className="transaction__block">
-                <table>
-                    <thead>
-                        <tr>{<RenderHeader headers={
-                            ['Тип', 'Сумма', 'Организация',
-                            'Категория', 'Контрагент', 'Пользователь',
-                            'Кошелек', 'Дата']
-                        } />}</tr>
-                    </thead>
-                    <tbody>
-                        {<RenderTransaction transactions={transactions} />}
-                    </tbody>
-                </table>
-            </div>
-            {
-                loading ? (
+                {loading ? (
                     <LoadingBox></LoadingBox>
                 ) : error ? (
                     <MessageBox varinat="danger">{error}</MessageBox>
                 ) : (
                     <>
-                        
-                    </>
-                )
-            }
+                    <div className="home__content">
+                        <div className="home__content-top column__space-between">
+                            <div className="home__cash-block">
+                                <div className="home__cash-type">Доходы</div>
+                                <div className="home__cash-amount">
+                                    {incomesAndExpenses ? ('+ ' + incomesAndExpenses.income + ' с') : ''}
+                                </div>
+                            </div>
+                            <div className="home__cash-block">
+                                <div className="home__cash-type">Расходы</div>
+                                <div className="home__cash-amount">
+                                    {incomesAndExpenses ? ('- ' + incomesAndExpenses.expense + ' с') : ''}
+                                </div>
+                            </div>
+                            <div className="home__filter">
+                                <div className="home__filter-self">
+                                    <div className="home__filter-icon"></div>
+                                    <select className="home__filter-select" onChange={(e) => filterByTime(e)}>
+                                        <option value="choose">Выберите</option>
+                                        <option value="year">год</option>
+                                        <option value="month">месяц</option>
+                                        <option value="week">неделя</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="home__filter-adaptive">
+                            <div onClick={(e) => {
+                              setCustomActive(3)
+                              filterByTime(e)}} 
+                              className={`customNavLink ${customActive === 3 ? 'customNavLink--active' : ''}` }>
+                              Год
+                            </div>
+                            <div onClick={(e) => {
+                              setCustomActive(2)
+                              filterByTime(e)}} 
+                              className={`customNavLink ${customActive === 2 ? 'customNavLink--active' : ''}` }>
+                              Месяц
+                            </div>
+                            <div onClick={(e) => {
+                              setCustomActive(1)
+                              filterByTime(e)}} 
+                              className={`customNavLink ${customActive === 1 ? 'customNavLink--active' : ''}` }>
+                              Неделя
+                             </div>
+                           </div>
+                        <div className="home__content-body">
+                            <table>
+                                <thead>
+                                    <tr>{
+                                        ['Кошелек', 'Баланс'].map((key, index) => {
+                                            return <td key={index}>{key}</td>
+                                        })
+                                    }</tr>
+                                </thead>
+                                <tbody>
+                                    {<RenderWallet walletBalance={walletBalance} />}
+                                </tbody>
+                            </table>
+                        </div>
+                        <AddIncExpTransaction show={showIncExp} handleClose={hideModal} />
+                        <AddTransTransaction show={showTrans} handleClose={hideModal} />
+                        <div className="home__content-buttons column__space-between">
+                            <button onClick={showModal} className="home__button-income">
+                                <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} />
+                                <div>Доход</div>
+                            </button>
+                            <button onClick={showModal} className="home__button-expense">
+                                <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> 
+                                <div>Расход</div>
+                            </button>
+                            <button onClick={showTransferModal} className="home__button-transfer">
+                                <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} />
+                                <div>Перевод</div>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="transaction__block">
+                        {media ? 
+                        (<>
+                            <div className="transaction__title-block">Последние транзакции</div>
+                            <RenderAdaptiveTransaction  transactions={transactions} />
+                        </>) : <RenderTransaction transactions={transactions} />}
+                    </div>    
+                </>
+                )}
         </section>
     )
 }

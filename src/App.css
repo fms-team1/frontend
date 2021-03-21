@@ -25,7 +25,8 @@ aside, nav, footer, header, section {
 }
 html, body {
   height: 100%;
-  min-width: 320px; }
+  min-width: 320px;
+}
 body {
   line-height: 1;
   font-size: 14px;
@@ -46,7 +47,7 @@ button {
 button::-moz-focus-inner {
   padding: 0;
   border: 0;
-}      
+}
 a, a:visited {
   text-decoration: none;
 }
@@ -66,13 +67,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* App */
 
-.App-header {
-  color: black;
-  background-color: #000;
-  height: 70px;
-  padding-top: 20px;
-}
-
 .container {
   max-width: 1440px;
   margin: 0 auto;
@@ -88,6 +82,11 @@ h1, h2, h3, h4, h5, h6 {
 .column__space-around {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+}
+.column__space-between {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 input[type=submit] {
@@ -107,6 +106,12 @@ input[type=submit] {
   font-size: large;
   display: flex;
   justify-content: center;
+}
+.main {
+  position: absolute;
+  padding: 10px 0;
+  width: 80%;
+  left: 20%;
 }
 
 /* Register Screen */
@@ -302,23 +307,16 @@ input[type=submit] {
 
 /* Alert */
 .loader-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f8f8f8AD;
-  z-index: 1000;
-}
-.loading {
-  position: absolute;
-  left: 47.5%;
-  top: 45%;
+  margin: 1% auto;
+  text-align: center;
 }
 .loading i {
-  font-size: 70px;
+  font-size: 30px;
+  color: #1778E9;
 }
 .alert {
+  width: 80%;
+  margin: 0 auto;
   padding: 1rem;
   border: 0.1rem solid transparent;
   border-radius: 0.5rem;
@@ -338,12 +336,13 @@ input[type=submit] {
 
 /* Sidebar */
 .sidebar {
-  position: fixed;
-  height: 100%;
+  position: absolute;
   width: 20%;
+  height: 230%;
+  background-color: #fff;
 }
 .sidebar__icon {
-  margin: 30% auto 17% auto;
+  margin: 20% auto 17% auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -382,73 +381,27 @@ input[type=submit] {
 }
 
 /* HOME SCREEN */
-
-.home__profile-bar {
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 8px 22px 8px 22px;
-  border-radius: 8px;
-  background-color: #fff;
-}
-.home__profile-icon {
-  margin-right: 16px;
-  width: 30px;
-  height: 30px;
-  background-color: #1778E9;
-  border-radius: 15px;
-}
-.home__profile-name {
-  font-size: 16px;
-  line-height: 20px;
-  color: #6B6666;
-}
-.home__top-block {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-.home__search {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  color: #6B6666;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  padding: 16px 20px 16px 90px;
-}
-.home__search::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  height: 20px;
-  width: 20px;
-  border-radius: 50em;
-  background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
-  background-size: contain;
-  opacity: 0;
-  pointer-events: none;
-}
-.home__search:focus::-webkit-search-cancel-button {
-  opacity: .3;
-  pointer-events: all;
-}
 .home__cash-block {
+  max-width: 40%;
+  height: fit-content;
   background: #358AED;
   border-radius: 10px;
-  padding: 13px 30px 10px;
+  padding: 2% 3% 3% 3%;
   text-align: center;
 }
 .home__cash-type {
-  margin-bottom: 11px;
+  margin-bottom: 7%;
   font-weight: 500;
-  font-size: 14px;
   line-height: 17px;
   color: #FFFFFF;
 }
 .home__cash-amount {
   font-weight: 600;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 29px;
   color: #FFFFFF;
 }
-.home__filter {
+.home__filter-self {
   position: relative;
 }
 .home__filter-icon {
@@ -469,7 +422,6 @@ input[type=submit] {
   border-radius: 8px;
   padding: 15px 55px;
   font-weight: 600;
-  font-size: 14px;
   line-height: 17px;
   color: #6B6666;
   -moz-appearance: none;
@@ -480,29 +432,32 @@ input[type=submit] {
   background-position: right .7em top 50%, 0 0;
   background-size: 1em auto, 100%;
 }
+.home__filter-adaptive {
+  display: none;
+}
 .home__content {
   width: 60%;
   margin-left: 10%;
 }
 .home__content-top {
-  margin: 3% 0;
+  margin: 3% 0 0;
 }
 .home__content-buttons {
-  display: flex;
-  justify-content: space-around;
   margin: 5% 0;
 }
 .home__content-buttons button {
-  padding: 17px 50px 16px 23px;
+  padding: 3% 7% 3% 5%;
   background-color: #fff;
   border-radius: 8px;
   display: flex;
   align-items: center;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 130%;
   line-height: 24px;
 }
 .home__content-buttons img {
+  width: 25%;
+  height: 25%;
   margin-right: 15%;
 }
 .home__button-income {
@@ -521,7 +476,7 @@ input[type=submit] {
 }
 table {
   width: 100%;
-  padding: 16px 22px 30px 50px;
+  padding: 3% 6% 5% 8%;
   background: #FFFFFF;
   border-radius: 12px;
 }
@@ -614,7 +569,6 @@ td {
   border-radius: 8px;
   padding: 15px 35px 15px 20px;
   font-weight: 600;
-  font-size: 14px;
   line-height: 17px;
   color: #6B6666;
   -moz-appearance: none;
@@ -632,9 +586,108 @@ td {
   padding: 3% 0;
 }
 
+@media only screen and (max-width: 1200px) {
+  tr td:nth-child(3),
+  tr td:nth-child(5),
+  tr td:nth-child(6) {
+    display: none;
+  }
+  .home__cash-amount {
+    font-size: 20px;
+    line-height: 19px;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .home__cash-block {
+    width: 40%;
+  }
+  .sidebar {
+    width: 25%;
+  }
+  .main {
+    width: 75%;
+  }
+  .home__content-top {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .home__filter-self {
+    display: none;
+  }
+  .home__filter {
+    width: 100%;
+  }
+  .home__filter-adaptive {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .customNavLink {
+    width: 25%;
+    text-align: center;
+    margin-top: 3%;
+    background-color: #fff;
+    padding: 3% 5%;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #6B6666;
+    line-height: 17px;
+  }
+  .customNavLink--active {
+    color: #1778E9;
+  }
+  .home__content-buttons button {
+    font-size: 100%;
+  }
+}
+
 @media only screen and (max-width: 768px) {
+  .home__content {
+    margin: 3% auto 0 auto;
+  }
+  .home__content-top {
+    justify-content: space-between;
+  }
+  .home__cash-block {
+    margin: 3% 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
   .signin__block {
     display: none;
+  }
+  .sidebar {
+    top: 0;
+    width: 100%;
+    height: 280%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9;
+    transform: translateX(-100%);
+  }
+  .sidebar__whole {
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    width: 35%;
+    padding: 1% 1% 2%;
+    height: fit-content;
+    z-index: 9;
+    transform: translateX(-100%);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s;
+  }
+  .sidebar__whole.open {
+    transform: translateX(0);
+    transition: all 0.5s;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .remember-me__label {
+    cursor: none;
   }
   .signin__form {
     padding: 15% 0;
@@ -645,19 +698,119 @@ td {
     left: 46%;
   }
 }
+@media only screen and (max-width: 600px) {
+  .sidebar__whole {
+    width: 50%;
+  }
+  .home__content {
+    width: 75%;
+  }
+  .home__cash-amount {
+    font-size: 16px;
+    line-height: 19px;
+  }
+  .home__content-buttons button {
+    font-size: 80%;
+  }
+  .transaction__title-block {
+    margin: 7% 0 7%;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
+  }
+  .transaction__item {
+    height: 70px;
+    margin-bottom: 8px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  .transaction__item div:first-child {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+  }
+  .transaction__item div:nth-child(2) {
+    font-weight: 500;
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 16px;
+    line-height: 22px;
+    color: #282626;
+    position: absolute;
+    top: 20%;
+    left: 16%;
+  }
+  .transaction__item div:nth-child(3) {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 22px;
+    position: absolute;
+    top: 20%;
+    right: 8%;
+  }
+  .transaction__item div:last-child {
+    font-size: 15px;
+    line-height: 20px;
+    color: #848181;
+    position: absolute;
+    bottom: 10%;
+    left: 16%;
+  }
+  .transaction__expense {
+    color: #E11616;
+  }
+  .transaction__income {
+    color: #4AAF39;
+  }
+  .transaction__transfer {
+    color: #3B3BB7;
+  }
+}
 
 @media only screen and (max-width: 425px) {
+  .navbar__link {
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .home__content-buttons button {
+    padding: 2% 4% 2% 3%;
+    font-size: 72%;
+  }
+  .home__content-buttons img {
+    margin-right: 8%;
+  }
+  .customNavLink {
+    width: 30%;
+  }
+  .sidebar__whole {
+    width: 65%;
+  }
+  .home__content {
+    width: 90%;
+  }
+  .transaction__item div:first-child {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+  }
+  .transaction__item div:nth-child(2) {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .transaction__item div:nth-child(3) {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .transaction__item div:last-child {
+    font-size: 13px;
+    line-height: 20px;
+  }
   .signin__form {
     width: 95%;
   }
-  .loading {
-    left: 40%;
-  }
-}
-.main {
-  position: relative;
-  width: 80%;
-  height: 100%;
-  background: #F1F1FF;
-  left: 20%;
 }

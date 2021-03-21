@@ -47,11 +47,12 @@ export default function SigninScreen(props) {
                         <img src={`${process.env.PUBLIC_URL}/web-analytics 1.svg`} alt="web-analytics"/>
                     </div>
                     <div className="signin__form">
+                    {loading ? (<LoadingBox></LoadingBox>) : error ? (<MessageBox></MessageBox>) :
+                    <>
                         <div className="signin__icon">
                             <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="icon"/>
                             <div className="signin__icon-title">NeoFin</div>
                         </div>
-                        {loading && <LoadingBox></LoadingBox>}
                         <form onSubmit={submitHandler}>
                             <CustomTextInput
                                 type="email"
@@ -82,6 +83,7 @@ export default function SigninScreen(props) {
                                 <NavLink to="/">Забыли пароль?</NavLink>
                             </div>
                         </form>
+                    </>}
                     </div>
                 </div>
             </div>
