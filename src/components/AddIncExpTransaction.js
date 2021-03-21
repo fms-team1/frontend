@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewTransaction, listLastTransactions, getAllCategory } from '../actions/transactionActions';
+import { addIncExpTransaction, listLastTransactions, getAllCategory } from '../actions/transactionActions';
 import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
 
-export default function AddTransaction(props) {
+export default function AddIncExpTransaction(props) {
 
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -26,9 +26,8 @@ export default function AddTransaction(props) {
 
   const showHideClassName = props.show ? "modal display-block" : "modal display-none";
 
-    const submitHandler = (e) => {
-      e.preventDefault();
-      dispatch(addNewTransaction(userInfo, +summa, +wallet, +category, comment, counterparty, date));
+    const submitHandler = () => {
+      dispatch(addIncExpTransaction(userInfo, +summa, +wallet, +category, comment, counterparty, date));
     };
 
     const getCategoryId = (e) => {
@@ -64,8 +63,8 @@ export default function AddTransaction(props) {
     return (
         <div className={showHideClassName}>
           <section className="modal__main column__center">
-            {/* {props.typeTransaction} */}
-            <form onSubmit={submitHandler} className="modal__main-from">
+            <img src={`${process.env.PUBLIC_URL}/icons/exit.svg`} onClick={()=> props.handleClose()} className="modal__exit" />
+            <form onSubmit={submitHandler} className="modal__main-form">
               <div className="modal__top-form">
                 <div className="modal__form-item">
                   <label htmlFor="organization">Организация</label>

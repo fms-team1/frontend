@@ -9,10 +9,13 @@ import JournalScreen from './screens/JournalScreen';
 import Sidebar from './components/Sidebar';
 import UsersScreen, { NoMatch } from './screens/UsersScreen';
 import AnalyticsScreen from './screens/AnalyticsScreen';
+import AppBar from './components/AppBar';
+import { useState } from 'react';
 
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo, loading } = userSignin;
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const dispatch = useDispatch();
   const signoutHandler = () => {
     dispatch(signout());
@@ -21,18 +24,15 @@ function App() {
   return (
     <BrowserRouter>
       {userInfo && (
-        // <header className="App-header">
-        //   <Link className="signout" to="#" onClick={signoutHandler}>
-        //     Sign Out
-        //   </Link>
-        // </header>
-        <Sidebar />
+        <>
+          <AppBar state={sidebarIsOpen} setState={setSidebarIsOpen} />
+          <Sidebar state={sidebarIsOpen} setState={setSidebarIsOpen} />
+        </>
       )
       }
       <main className={userInfo && 'main'}>
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
-
         <Route path={["/journal", "/journal/neobis", "/journal/neolabs"]} component={JournalScreen}></Route>
         <Route path="/analytics" component={AnalyticsScreen}></Route>
         <Route path="/users" component={UsersScreen}></Route>
