@@ -1,4 +1,4 @@
-import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS } from "../constants/transactionConstants";
+import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, FILTER_LIST_FAIL, FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, SECTION_LIST_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS } from "../constants/transactionConstants";
 
 export const lastListTransactionReducer = (
     state = { loading: true, transactions: [] },
@@ -78,19 +78,37 @@ export const listPeriodTransactionsReducer = (
             return state;
     }
 };
-export const getAllCategoryReducer = (
+export const getCategoriesByNeoSectionReducer = (
     state = { loading: true, categories: [] },
     action
 ) => {
     switch (action.type) {
-        case CATEGORY_LIST_REQUEST:
+        case CATEGORIES_BY_SECTION_REQUEST:
             return { loading: true };
-        case CATEGORY_LIST_SUCCESS:
+        case CATEGORIES_BY_SECTION_SUCCESS:
             return {
                 loading: false,
                 categories: action.payload
             };
-        case CATEGORY_LIST_FAIL:
+        case CATEGORIES_BY_SECTION_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+export const getNeoSectionsReducer = (
+    state = { loading: true, sections: [] },
+    action
+) => {
+    switch (action.type) {
+        case SECTION_LIST_REQUEST:
+            return { loading: true };
+        case SECTION_LIST_SUCCESS:
+            return {
+                loading: false,
+                sections: action.payload
+            };
+        case SECTION_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;
@@ -125,6 +143,21 @@ export const addNewTransactionReducer = ( state = {}, action ) => {
             };
         case ADD_TRANSACTION_FAIL:
             return { loadingAdd: false, errorAdd: action.payload };
+        default:
+            return state;
+    }
+};
+export const getFilterListReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case FILTER_LIST_REQUEST:
+            return { loadingFilter: true };
+        case FILTER_LIST_SUCCESS:
+            return {
+                loadingFilter: false,
+                filterTypeList: action.payload
+            };
+        case FILTER_LIST_FAIL:
+            return { loadingFilter: false, errorFilter: action.payload };
         default:
             return state;
     }

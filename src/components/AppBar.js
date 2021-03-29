@@ -15,7 +15,7 @@ export default function AppBar(props) {
 
     useEffect(() => {
         dispatch(getCurrentUser(userInfo));
-    }, [dispatch]);
+    }, []);
     return (
         <div className="appBar">
             <div className="burger-menu__block">
@@ -29,7 +29,7 @@ export default function AppBar(props) {
             <div className="search-bar__block">
             {loadingProfileBar ? (<LoadingBox></LoadingBox>) :
             errorProfileBar ? (
-                <MessageBox></MessageBox>
+                <MessageBox varinat="danger">{errorProfileBar}</MessageBox>
             ) :
                 <>
                         <div className="home__search-bar">

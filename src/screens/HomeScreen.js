@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -8,6 +8,7 @@ import RenderWallet from '../components/RenderWallet';
 import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
 import AddIncExpTransaction from '../components/AddIncExpTransaction';
 import AddTransTransaction from '../components/AddTransTransaction';
+import { signout } from '../actions/userActions';
 
 export default function HomeScreen(props) {
     const dispatch = useDispatch();
@@ -44,45 +45,48 @@ export default function HomeScreen(props) {
             let weekDate = new Date(ourDate);
             let pastDate = weekDate.getDate() - 7;
             weekDate.setDate(pastDate);
-            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(weekDate)));
+            dispatch(listPeriodTransactions(userInfo, converStringDate(weekDate) + ' ' + converStringDate(ourDate)));
         } else if (e.target.value === 'month' || e.target.innerText === 'Месяц') {
             let date = new Date(ourDate);
             let month = date.getMonth()-1;
             let formatPrevMonth = new Date(date.setMonth(month));
-            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(formatPrevMonth)));
+            dispatch(listPeriodTransactions(userInfo, converStringDate(formatPrevMonth) + ' ' + converStringDate(ourDate)));
         } else if (e.target.value === 'year' || e.target.innerText === 'Год') {
             let date = new Date(ourDate);
             let year = date.getFullYear()-1;
             let formatPrevYear = new Date(date.setFullYear(year));
-            dispatch(listPeriodTransactions(userInfo, converStringDate(ourDate) + ' ' + converStringDate(formatPrevYear)));
+            dispatch(listPeriodTransactions(userInfo, converStringDate(formatPrevYear) + ' ' + converStringDate(ourDate)));
         }
     }
     const [media, setMedia] = useState(false);
 
     useEffect(() => {
-        if(window.matchMedia("(max-width: 601px)").matches) {
+        if(window.matchMedia("(max-width: 620px)").matches) {
             setMedia(true);
         }
         else {
             setMedia(false);
         }
 
-        window.matchMedia("(max-width: 601px)").addEventListener("change", () => {
-            if(window.matchMedia("(max-width: 601px)").matches) {
+        window.matchMedia("(max-width: 620px)").addEventListener("change", () => {
+            if(window.matchMedia("(max-width: 620px)").matches) {
                 setMedia(true);
             }
             else setMedia(false);
         });
 
-    }, [window.matchMedia("(max-width: 601px)").matches]);
+    }, [window.matchMedia("(max-width: 620px)").matches]);
     useEffect(() => {
+        if(error && error.indexOf("403") !== -1) {
+            dispatch(signout());
+        }
         if (!userInfo) {
             props.history.push('/signin');
         }
         else {
             dispatch(listLastTransactions(userInfo));
         }
-    }, []);
+    }, [error]);
 
     return (
         <section className="home">

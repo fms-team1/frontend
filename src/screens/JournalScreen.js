@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getByNeoSection, getJournalList } from '../actions/transactionActions';
+import { getByNeoSection, getFilterList, getJournalList } from '../actions/transactionActions';
+import { signout } from '../actions/userActions';
+import Dropdown from '../components/Dropdown';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
-import RenderHeader from '../components/RenderHeader';
 import RenderTransaction from '../components/RenderTransaction';
 
 export default function JournalScreen() {
@@ -16,34 +17,50 @@ export default function JournalScreen() {
 
   const listJournal = useSelector((state) => state.listJournal);
   const { loading, error, transactions } = listJournal;
+  const filterList = useSelector((state) => state.filterList);
+  const { loadingFilter, errorFilter, filterTypeList } = filterList;
 
   const [media, setMedia] = useState(false);
 
-    useEffect(() => {
-        let mounted = true;
-        let mountedd = true;
-        if(window.matchMedia("(max-width: 601px)").matches) {
-            if(mounted) {
-                setMedia(true);
-            }
+  const items = [
+    {
+      id: 1,
+      value: 'Неделя',
+    },
+    {
+      id: 2,
+      value: 'Месяц',
+    },
+    {
+      id: 3,
+      value: 'Год',
+    },
+  ];
+
+  useEffect(() => {
+    let mounted = true;
+    let mountedd = true;
+    if(window.matchMedia("(max-width: 620px)").matches) {
+      if(mounted) {
+        setMedia(true);
+      }
+    }
+    else {
+      setMedia(false);
+    }
+    window.matchMedia("(max-width: 620px)").addEventListener("change", () => {
+      if(window.matchMedia("(max-width: 620px)").matches) {
+        if(mountedd) {
+          setMedia(true);
         }
-        else {
-            setMedia(false);
-        }
+      }
+      else setMedia(false);
+        return mountedd = false;
+      });
 
-        window.matchMedia("(max-width: 601px)").addEventListener("change", () => {
-            if(window.matchMedia("(max-width: 601px)").matches) {
-                if(mountedd) {
-                    setMedia(true);
-                }
-            }
-            else setMedia(false);
-            return mountedd = false;
-        });
+      return () => mounted = false;
 
-        return () => mounted = false;
-
-    }, [window.matchMedia("(max-width: 601px)").matches]);
+    }, [window.matchMedia("(max-width: 620px)").matches]);
 
   const submitHandler = (e, section) => {
     if(section === 'NEOBIS') {
@@ -58,7 +75,11 @@ export default function JournalScreen() {
   }
 
   useEffect(() => {
-      dispatch(getJournalList(userInfo));
+    if(error && error.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+    dispatch(getJournalList(userInfo));
+    dispatch(getFilterList(userInfo));
 }, []);
 
 
@@ -100,13 +121,8 @@ export default function JournalScreen() {
           </NavLink>
         </nav>
         <div className="journal__filter">
-          <div className="journal__filter-item">
-            <select className="journal__filter-select">
-              <option value="week">Операция</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
+          {/* <Dropdown title="Операция" items={filterTypeList && filterTypeList[1].data} multiSelect /> */}
+          <Dropdown title="Период" items={items} multiSelect calendarIcon />
           <div className="journal__filter-item">
             <select className="journal__filter-select">
               <option value="week">Категория</option>
