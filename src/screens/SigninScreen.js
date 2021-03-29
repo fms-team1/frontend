@@ -47,7 +47,7 @@ export default function SigninScreen(props) {
                         <img src={`${process.env.PUBLIC_URL}/web-analytics 1.svg`} alt="web-analytics"/>
                     </div>
                     <div className="signin__form">
-                    {loading ? (<LoadingBox></LoadingBox>) : error ? (<MessageBox></MessageBox>) :
+                    {loading ? (<LoadingBox></LoadingBox>) : error ? (<MessageBox variant="danger">{error}</MessageBox>) :
                     <>
                         <div className="signin__icon">
                             <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="icon"/>

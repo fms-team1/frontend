@@ -7,7 +7,13 @@
   background: rgba(0, 0, 0, 0.6);
   z-index: 10;
 }
-  
+#date::-webkit-calendar-picker-indicator {
+  width: 22px;
+  height: 20px;
+  border-width: thin;
+  background: url(../icons/calendar_two.svg) no-repeat;
+  cursor: pointer;
+}  
 .modal__main {
   padding: 10% 5%;
   position: fixed;
@@ -44,6 +50,23 @@
   font-size: 16px;
   line-height: 20px;
   color: #4C4C4C;
+}
+.modal__main-form select {
+  padding: 17px 30px 17px 18px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #4C4C4C;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url(../icons/select_arrow_non-active.svg);
+  background-color: #fff;
+  background-repeat: no-repeat, repeat;
+  background-position: right 10px top 50%, 0 0;
+  background-size: 1em auto, 100%;
+}
+.modal__main-form select:focus {
+  background-image: url(../icons/select_arrow_active.svg);
 }
 .modal__main-form input[type=submit] {
   width: 100%;

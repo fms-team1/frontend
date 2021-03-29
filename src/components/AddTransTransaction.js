@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { listLastTransactions, getAllWallet, addTransferTransaction } from '../actions/transactionActions';
+import { getAllWallet, addTransferTransaction } from '../actions/transactionActions';
 import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
@@ -27,6 +27,14 @@ export default function AddTransTransaction(props) {
       dispatch(addTransferTransaction(userInfo, +amount, +walletTo, +walletFrom, comment));
     };
 
+    const [focused, setFocused] = useState("");
+    const handleFocus = (inputType) => {
+      setFocused(inputType);
+    }
+    const handleBlur = () => {
+        setFocused("");
+    }
+
     const getWalletFrom = (e) => {
       setWalletFrom(e.target.value);
     }
@@ -52,27 +60,49 @@ export default function AddTransTransaction(props) {
               <div className="modal__middle-form">
                 <div className="modal__form-item" onChange={(e) => getAmount(e)}>
                   <label htmlFor="amount">Сумма</label>
-                  <input type="number" id="amount" placeholder="0" />
+                  <input type="number" id="amount"
+                  onFocus={() => handleFocus("amount")} onBlur={handleBlur}
+                  style={{
+                    borderColor: focused == "amount"
+                    ? '#1778E9' : '#848181'
+                  }}
+                  placeholder="0" />
                 </div>
                 <div className="modal__form-item">
-                  <label htmlFor="wallet">WalletFromId</label>
-                  <select name="wallet" onChange={(e) => getWalletFrom(e)}>
-                    <option value="default">select wallet from id</option>
+                  <label htmlFor="walletFrom">Со счета</label>
+                  <select name="walletFrom"
+                  onFocus={() => handleFocus("walletFrom")} onBlur={handleBlur}
+                  style={{
+                    borderColor: focused == "walletFrom"
+                    ? '#1778E9' : '#848181'
+                  }}
+                  onChange={(e) => getWalletFrom(e)}>
                     {wallets ? wallets.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
                 <div className="modal__form-item">
-                  <label htmlFor="wallet">WalletToId</label>
-                  <select name="wallet" onChange={(e) => getWalletTo(e)}>
-                    <option value="default">select wallet to id</option>
+                  <label htmlFor="walletTo">На счет</label>
+                  <select name="walletTo"
+                  onFocus={() => handleFocus("walletTo")} onBlur={handleBlur}
+                  style={{
+                    borderColor: focused == "walletTo"
+                    ? '#1778E9' : '#848181'
+                  }}
+                  onChange={(e) => getWalletTo(e)}>
                     {wallets ? wallets.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
               </div>
-              <div className="modal__bottom-form">
+              <div className="modal__bottom-transfer">
                 <div className="modal__form-item">
                   <label htmlFor="comment">Примечание</label>
-                  <textarea id="comment" name="w3review" rows="4" onChange={(e) => getComment(e)}></textarea>
+                  <textarea id="comment" name="w3review"
+                  onFocus={() => handleFocus("comment")} onBlur={handleBlur}
+                  style={{
+                    borderColor: focused == "comment"
+                    ? '#1778E9' : '#848181'
+                  }}
+                  rows="4" onChange={(e) => getComment(e)}></textarea>
                 </div>
                 <div className="modal__form-item">
                   <input type="submit" value="Добавить" />

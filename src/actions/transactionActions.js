@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS } from '../constants/transactionConstants';
+import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS,
+        CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS,
+        JOURNAL_BY_SECTION_FAIL,JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS,
+        JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS,
+        TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS,
+        TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS,
+        WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS,
+        FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, FILTER_LIST_FAIL,
+        CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, SECTION_LIST_FAIL } from '../constants/transactionConstants';
 
 
 export const listLastTransactions = (token) => async (dispatch) => {
@@ -15,6 +23,22 @@ export const listLastTransactions = (token) => async (dispatch) => {
         dispatch({ type: TRANSACTION_LAST_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: TRANSACTION_LAST_LIST_FAIL, payload: error.message });
+    }
+}
+export const getCategoriesByNeoSection = (token, neoSection) => async (dispatch) => {
+    dispatch({
+        type: CATEGORIES_BY_SECTION_REQUEST
+    });
+    try {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/category/getCategoriesByNeoSection', {
+            headers: {
+                'Authorization': `Bearer ${token.jwt}`
+            },
+            params: { neoSectionId : +neoSection }
+        });
+        dispatch({ type: CATEGORIES_BY_SECTION_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: CATEGORIES_BY_SECTION_FAIL, payload: error.message });
     }
 }
 export const addTransferTransaction = (token, amount, walletTo, walletFrom, comment) => async (dispatch) => {
@@ -93,6 +117,33 @@ export const getJournalList = (token) => async (dispatch) => {
         dispatch({ type: JOURNAL_LIST_FAIL, payload: error.message });
     }
 }
+export const getFilterList = (token) => async (dispatch) => {
+    dispatch({
+        type: FILTER_LIST_REQUEST
+    });
+    try {
+        const data = await axios.all([
+            axios.get('https://neo-fms.herokuapp.com/wallet/getAllActiveWallets', {
+                headers: {
+                    'Authorization': `Bearer ${token.jwt}`
+                }
+            }),
+            axios.get('https://neo-fms.herokuapp.com/transaction/getTransactionTypes', {
+                headers: {
+                    'Authorization': `Bearer ${token.jwt}`
+                }
+            }),
+            axios.get('https://neo-fms.herokuapp.com/category/getAll', {
+                headers: {
+                    'Authorization': `Bearer ${token.jwt}`
+                }
+            })
+        ]).then(axios.spread((...responses) => responses));
+        dispatch({ type: FILTER_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: FILTER_LIST_FAIL, payload: error.message });
+    }
+}
 export const getByNeoSection = (token, section) => async (dispatch) => {
     dispatch({
         type: JOURNAL_BY_SECTION_REQUEST
@@ -121,6 +172,21 @@ export const getAllCategory = (token) => async (dispatch) => {
         dispatch({ type: CATEGORY_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: CATEGORY_LIST_FAIL, payload: error.message });
+    }
+}
+export const getNeoSections = (token) => async (dispatch) => {
+    dispatch({
+        type: SECTION_LIST_REQUEST
+    });
+    try {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/category/getNeoSections', {
+            headers: {
+                'Authorization': `Bearer ${token.jwt}`
+            }
+        });
+        dispatch({ type: SECTION_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: SECTION_LIST_FAIL, payload: error.message });
     }
 }
 export const getAllWallet = (token) => async (dispatch) => {

@@ -22,7 +22,8 @@ export const getCurrentUserReducer = (state = {}, action) => {
             return {
                 loadingProfileBar: false,
                 surname: action.payload.surname,
-                name: action.payload.name
+                name: action.payload.name,
+                currentUserData: action.payload
              };
         case GET_CURRENT_USER_FAIL:
             return { loadingProfileBar: false, errorProfileBar: action.payload };
