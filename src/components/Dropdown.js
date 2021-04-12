@@ -1,70 +1,111 @@
 import React, { useState } from 'react';
-import './Dropdown.css'
+import './Dropdown.css';
 
-export default function Dropdown({ title, items, multiSelect = false, calendarIcon, operation }) {
+export default function Dropdown({ state, setState, title, items, dropdownType }) {
   const [open, setOpen] = useState(false);
-  const [selection, setSelection] = useState([]);
+  const [selected, selectedSet] = useState(null);
   const toggle = () => setOpen(!open);
 
-  // console.log(items);
-
   function handleOnClick(item) {
-    if (!selection.some(current => current.id === item.id)) {
-      if (!multiSelect) {
-        setSelection([item]);
-      } else if (multiSelect) {
-        setSelection([...selection, item]);
-      }
-    } else {
-      let selectionAfterRemoval = selection;
-      selectionAfterRemoval = selectionAfterRemoval.filter(
-        current => current.id !== item.id
-      );
-      setSelection([...selectionAfterRemoval]);
-    }
+    setState(item.id);
+    selectedSet(item.name);
+    setOpen(false);
   }
-
-  function isItemInSelection(item) {
-    if (selection.some(current => current.id === item.id)) {
-      return true;
-    }
-    return false;
+  function handleOnCancel() {
+    setState(null);
+    selectedSet(null);
   }
 
   return (
     <div className="dropdown__filter-item">
-      <div
-        tabIndex={0}
-        className="dropdown__filter-header"
-        role="button"
-        onKeyPress={() => toggle(!open)}
-        onClick={() => toggle(!open)}
-      >
-        {calendarIcon && <img src={`${process.env.PUBLIC_URL}/icons/calendar.svg`} className="dropdown__list-calendar"/>}
+      { selected && state !== null ?
+        <div
+          tabIndex={0}
+          className="dropdown__selected-header"
+        >
+          <div className="dropdown__selected-title">{selected}</div>
+          <img
+            src={`${process.env.PUBLIC_URL}/icons/dropdown-cancel.svg`}
+            onKeyPress={() => handleOnCancel()}
+            onClick={() => handleOnCancel()}
+            className="dropdown__cancel-icon" />
+        </div> :
+        <div
+          tabIndex={0}
+          className="dropdown__filter-header"
+          role="button"
+          onKeyPress={() => toggle(!open)}
+          onClick={() => toggle(!open)}
+        >
         <div className="dropdown__filter-title">{title}</div>
         <img src={`${process.env.PUBLIC_URL}/icons/dropdown.svg`} className="dropdown__header-icon" />
       </div>
-        {open && (
+        }
+        {open && items && (
           <div className="dropdown__filter-list">
-            { operation ? items.map(item => (
-                <button className="dropdown__list-item" key={item} type="button" onClick={() => handleOnClick(item)}>
+            { dropdownType=="wallets" ? items.map(item => (
+                <button className="dropdown__list-item" key={item.id} type="button" onClick={() => handleOnClick(item)}>
                   {
-                    item === 'INCOME' ?
-                    <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} /> :
-                    item === 'EXPENSE' ?
-                    <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> :
-                    items === 'MONEY_TRANSFER' ?
-                    <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} /> : ''
+                    item.id === 1 ?
+                    <>
+                      <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
+                      <div>{item.name}</div>
+                      {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                    </> :
+                    item.id === 2 ?
+                    <>
+                      <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} />
+                      <div>{item.name}</div>
+                      {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                    </> :
+                    item.id === 5 ?
+                    <>
+                      <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} />
+                      <div>{item.name}</div>
+                      {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                    </> :
+                    item.id === 3 ?
+                    <>
+                      <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} />
+                      <div>{item.name}</div>
+                      {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                    </> : 
+                    <>
+                      <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
+                      <div>{item.name}</div>
+                      {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                    </>
                   }
-                  <div>{item}</div>
-                  {isItemInSelection(item) && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
                 </button>
-            )) : items.map(item => (
+            )) : dropdownType=="operations" ? items.map(item => (
               <button className="dropdown__list-item" key={item.id} type="button" onClick={() => handleOnClick(item)}>
-                <div>{item.value}</div>
-                {isItemInSelection(item) && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                {
+                  item.id === 0 ?
+                  <>
+                    <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} />
+                    <div>Доход</div>
+                    {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                  </> :
+                  item.id === 1 ?
+                  <>
+                    <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} />
+                    <div>Расход</div>
+                    {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                  </> :
+                  item.id === 2 ?
+                  <>
+                    <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} />
+                    <div>Перевод</div>
+                    {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+                  </> : ''
+                }
               </button>
-          ))}
+          )) : items.map(item => (
+            <button className="dropdown__list-item" key={item.id} type="button" onClick={() => handleOnClick(item)}>
+              <div>{item.name}</div>
+              {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
+            </button>
+        ))}
         </div>
       )}
     </div>

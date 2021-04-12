@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import { getCurrentUserReducer, userSigninReducer } from "./reducers/userReducers";
+import { getAllUsersReducer, getCurrentUserReducer, userSigninReducer } from "./reducers/userReducers";
 import thunk from "redux-thunk";
-import { addNewTransactionReducer, getAllCategoryReducer, getAllWalletReducer, getCategoriesByNeoSectionReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
+import { addNewTransactionReducer, getAllCategoryReducer, getAllWalletReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
 
 const initialState = {
     userSignin: {
@@ -15,11 +15,12 @@ const reducer = combineReducers({
     lastTransaction: lastListTransactionReducer,
     userSignin: userSigninReducer,
     listJournal: getJournalListReducer,
-    categoryList: getCategoriesByNeoSectionReducer,
+    categoryList: getCategoryListReducer,
     sectionList: getNeoSectionsReducer,
     filterList: getFilterListReducer,
     addTransaction: addNewTransactionReducer,
     currentUser: getCurrentUserReducer,
+    allUsers: getAllUsersReducer,
     walletList: getAllWalletReducer
 })
 

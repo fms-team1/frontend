@@ -125,7 +125,7 @@ export default function HomeScreen(props) {
                         <div className="home__filter-adaptive">
                             <div onClick={(e) => {
                               setCustomActive(3)
-                              filterByTime(e)}} 
+                              filterByTime(e)}}
                               className={`customNavLink ${customActive === 3 ? 'customNavLink--active' : ''}` }>
                               Год
                             </div>
@@ -160,15 +160,15 @@ export default function HomeScreen(props) {
                         <AddTransTransaction show={showTrans} handleClose={hideModal} />
                         <div className="home__content-buttons column__space-between">
                             <button onClick={showModal} className="home__button-income">
-                                <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} />
+                                <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} />
                                 <div>Доход</div>
                             </button>
                             <button onClick={showModal} className="home__button-expense">
-                                <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> 
+                                <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> 
                                 <div>Расход</div>
                             </button>
                             <button onClick={showTransferModal} className="home__button-transfer">
-                                <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} />
+                                <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} />
                                 <div>Перевод</div>
                             </button>
                         </div>

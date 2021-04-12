@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 export default function RenderAdaptiveTransaction(props) {
 
@@ -9,11 +9,11 @@ export default function RenderAdaptiveTransaction(props) {
             <div key={id} className="transaction__item">
                 <div>{
                     transactionType === 'INCOME' ?
-                        <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} /> :
+                        <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} /> :
                     transactionType === 'EXPENSE' ?
-                        <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> :
+                        <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> :
                     transactionType === 'MONEY_TRANSFER' ?
-                        <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} /> : ''
+                        <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} /> : ''
                     }</div>
                 <div>{categoryName}</div>
                 <div className={

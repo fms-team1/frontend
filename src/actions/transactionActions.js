@@ -102,14 +102,36 @@ export const listPeriodTransactions = (token, period) => async (dispatch) => {
         dispatch({ type: TRANSACTION_PERIOD_LIST_FAIL, payload: error.message });
     }
 }
-export const getJournalList = (token) => async (dispatch) => {
+export const getJournalList = (
+    neoSectionId = null,
+    operation = null,
+    category = null,
+    startPeriod = null,
+    endPeriod = null,
+    wallet = null,
+    counterparty = null,
+    users = null
+    ) => async (dispatch, getState) => {
     dispatch({
         type: JOURNAL_LIST_REQUEST
     });
+    const {
+        userSignin: { userInfo },
+      } = getState();
     try {
-        const { data } = await axios.get('https://neo-fms.herokuapp.com/journal/getAllWeb', {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/transaction/getByGlobalFiltration', {
             headers: {
-                'Authorization': `Bearer ${token.jwt}`
+                'Authorization': `Bearer ${userInfo.jwt}`
+            },
+            params: {
+                neoSectionId : neoSectionId,
+                transactionTypeId : operation,
+                categoryId : category,
+                startDate : startPeriod,
+                endDate : endPeriod,
+                walletId : wallet,
+                counterpartyId : counterparty,
+                userId : users
             }
         });
         dispatch({ type: JOURNAL_LIST_SUCCESS, payload: data });
@@ -117,7 +139,7 @@ export const getJournalList = (token) => async (dispatch) => {
         dispatch({ type: JOURNAL_LIST_FAIL, payload: error.message });
     }
 }
-export const getFilterList = (token) => async (dispatch) => {
+export const getFilterTypeList = (token) => async (dispatch) => {
     dispatch({
         type: FILTER_LIST_REQUEST
     });
@@ -133,11 +155,21 @@ export const getFilterList = (token) => async (dispatch) => {
                     'Authorization': `Bearer ${token.jwt}`
                 }
             }),
-            axios.get('https://neo-fms.herokuapp.com/category/getAll', {
+            axios.get('https://neo-fms.herokuapp.com/category/getNeoSections', {
                 headers: {
                     'Authorization': `Bearer ${token.jwt}`
                 }
-            })
+            }),
+            axios.get('https://neo-fms.herokuapp.com/user/getAllUsers', {
+                headers: {
+                    'Authorization': `Bearer ${token.jwt}`
+                }
+            }),
+            axios.get('https://neo-fms.herokuapp.com/people/getAllCounterparties', {
+                headers: {
+                    'Authorization': `Bearer ${token.jwt}`
+                }
+            }),
         ]).then(axios.spread((...responses) => responses));
         dispatch({ type: FILTER_LIST_SUCCESS, payload: data });
     } catch (error) {

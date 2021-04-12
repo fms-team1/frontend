@@ -5,7 +5,7 @@ import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
 
-export default function AddIncExpTransaction(props) {
+export default function AddAccountant(props) {
 
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;

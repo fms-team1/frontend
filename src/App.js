@@ -4,7 +4,6 @@ import HomeScreen from './screens/HomeScreen';
 import SigninScreen from './screens/SigninScreen'
 import RegisterScreen from './screens/RegisterScreen';
 import { useDispatch, useSelector } from 'react-redux';
-import { signout } from './actions/userActions';
 import JournalScreen from './screens/JournalScreen';
 import Sidebar from './components/Sidebar';
 import UsersScreen, { NoMatch } from './screens/UsersScreen';
@@ -14,28 +13,26 @@ import { useState } from 'react';
 
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo, loading } = userSignin;
+  const { userInfo } = userSignin;
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
-  const dispatch = useDispatch();
-  const signoutHandler = () => {
-    dispatch(signout());
-  };
+  const [logOutButton, setLogOutButton] = useState(false);
 
   return (
     <BrowserRouter>
-      {userInfo && (
+      {userInfo && window.location.pathname !== '/register' && (
         <>
-          <AppBar state={sidebarIsOpen} setState={setSidebarIsOpen} />
-          <Sidebar state={sidebarIsOpen} setState={setSidebarIsOpen} />
+          <AppBar logOutButton={logOutButton} setLogOutButton={setLogOutButton} state={sidebarIsOpen} setState={setSidebarIsOpen} />
+          <Sidebar setLogOutButton={setLogOutButton} state={sidebarIsOpen} setState={setSidebarIsOpen} />
         </>
       )
       }
-      <main className={userInfo && 'main'}>
+      <main className={userInfo && window.location.pathname !== '/register' && 'main'}>
         <Route path="/signin" component={SigninScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
         <Route path={["/journal", "/journal/neobis", "/journal/neolabs"]} component={JournalScreen}></Route>
         <Route path="/analytics" component={AnalyticsScreen}></Route>
         <Route path="/users" component={UsersScreen}></Route>
+        {/* <Route path="/addAccountant" component={}></Route> */}
 
         <Route path="/" component={HomeScreen} exact></Route>
       </main>

@@ -22,11 +22,11 @@ export default function RenderTransaction(props) {
                     <tr key={id}>
                         <td>{
                             transactionType === 'INCOME' ?
-                                <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} /> :
+                                <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} /> :
                             transactionType === 'EXPENSE' ?
-                                <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> :
+                                <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> :
                             transactionType === 'MONEY_TRANSFER' ?
-                                <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} /> : ''
+                                <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} /> : ''
                             }</td>
                         <td>{amount + ' с'}</td>
                         <td>{neoSection}</td>

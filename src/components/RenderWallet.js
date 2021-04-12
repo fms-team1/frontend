@@ -9,7 +9,8 @@ export default function RenderWallet(props) {
                     walletName === 'Наличные' ? <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} /> :
                     walletName === 'О! деньги' ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
                     walletName === 'Элсом' ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
-                    walletName === 'Demir Bank' ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> : ''
+                    walletName === 'Demir Bank' ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
+                    <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
                     }
                     <span>{walletName}</span>
                 </td>
