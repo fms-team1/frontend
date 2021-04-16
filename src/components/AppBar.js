@@ -41,9 +41,6 @@ export default function AppBar({logOutButton, setLogOutButton, state, setState})
                 <MessageBox varinat="danger">{errorProfileBar}</MessageBox>
             ) :
                 <>
-                    <Link to='/users' className="profile__user">
-                        <img src={`${process.env.PUBLIC_URL}/icons/user.svg`} />
-                    </Link>
                     {logOutButton ? 
                         <>
                             <Link to='/signin' className="users__profile-exit" onClick={signoutHandler}>

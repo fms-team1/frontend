@@ -33,11 +33,16 @@
 .modal__add-main {
   width: 30% !important;
 }
+.modal__change-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30% !important;
+}
 .modal__exit {
   position: absolute;
   top: 3%;
-  right: 0;
-  width: 8%;
+  right: 3%;
   height: 8%;
   cursor: pointer;
 }
@@ -110,6 +115,76 @@
   display: none;
 }
 
+/* Add accountant */
+.accountant__main-form {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.accountant__form-item {
+  width: 300px;
+  position: relative;
+}
+.accountant__main-form input,
+.accountant__main-form select {
+  width: 100%;
+  margin: 10px 0 13px 0;
+  border: 1px solid #848181;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #4C4C4C;
+}
+.accountant__main-form select {
+  padding: 11px 30px 11px 18px;
+  font-size: 14px;
+  color: #4C4C4C;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url(../icons/select_arrow_non-active.svg);
+  background-color: #fff;
+  background-repeat: no-repeat, repeat;
+  background-position: right 10px top 50%, 0 0;
+  background-size: 1em auto, 100%;
+}
+.accountant__main-form select:focus {
+  background-image: url(../icons/select_arrow_active.svg);
+}
+.accountant__main-form input[type=submit] {
+  width: 100%;
+  color: #FFFFFF;
+  font-weight: 500;
+  padding: 11px 0;
+  font-size: 16px;
+  line-height: 20px;
+  background: #1778E9;
+  border: 1px solid #1778E9;
+}
+.accountant__form-item:nth-child(3) input:nth-child(2) {
+  width: 22%;
+  margin-right: 5%;
+}
+.accountant__form-item:nth-child(3) input:nth-child(3) {
+  width: 73%;
+}
+.accountant__form-item label {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #282626;
+}
+.accountant__password-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 37px;
+  right: 5%;
+  font-size: 15px;
+  color: #282626;
+}
+
 @media only screen and (max-width: 1120px) {
   .modal__bottom-form {
     padding: 5% 0;
@@ -135,9 +210,15 @@
   .modal__add-main {
     width: 50% !important;
   }
+  .modal__change-main {
+    width: 50% !important;
+  }
 }
 @media only screen and (max-width: 425px) {
   .modal__add-main {
+    width: 80% !important;
+  }
+  .modal__change-main {
     width: 80% !important;
   }
   .modal__choose-form {
@@ -159,5 +240,32 @@
   }
   .modal__main-form label {
     font-size: 15px;
+  }
+
+  .accountant__form-item {
+    width: 210px;
+  }
+  .accountant__main-form input,
+  .accountant__main-form select {
+    padding: 10px 10px;
+    font-size: 12px;
+  }
+  .accountant__main-form select {
+    padding: 11px 10px 11px 10px;
+    font-size: 14px;
+  }
+  .accountant__main-form input[type=submit] {
+    font-size: 14px;
+  }
+  .accountant__form-item:nth-child(3) input:nth-child(2) {
+    width: 26%;
+  }
+  .accountant__form-item:nth-child(3) input:nth-child(3) {
+    width: 69%;
+  }
+  .accountant__password-icon {
+    cursor: none;
+    top: 37px;
+    font-size: 13px;
   }
 }

@@ -4,6 +4,7 @@ import { addIncExpTransaction, listLastTransactions, getCategoriesByNeoSection, 
 import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
+import { ADD_TRANSACTION_RESET } from '../constants/transactionConstants';
 
 export default function AddIncExpTransaction(props) {
 
@@ -28,9 +29,8 @@ export default function AddIncExpTransaction(props) {
 
   const dispatch = useDispatch();
 
-  const showHideClassName = props.show ? "modal display-block" : "modal display-none";
-
-  const submitHandler = () => {
+  const submitHandler = (e) => {
+    e.preventDefault();
     dispatch(addIncExpTransaction(userInfo, +summa, +wallet, +category, comment, counterparty, date));
   };
   const handleFocus = (inputType) => {
@@ -38,6 +38,10 @@ export default function AddIncExpTransaction(props) {
   }
   const handleBlur = () => {
     setFocused("");
+  }
+  const handleClose = () => {
+    dispatch({ type: ADD_TRANSACTION_RESET });
+    props.history.push('/');
   }
 
   const getCategoryId = (e) => {
@@ -66,16 +70,12 @@ export default function AddIncExpTransaction(props) {
     dispatch(getNeoSections(userInfo));
     dispatch(getAllWallet(userInfo));
     dispatch(getAllCategory(userInfo));
-    if(messageAdd) {
-      dispatch(listLastTransactions(userInfo));
-      props.handleClose();
-    }
-  }, [messageAdd]);
+  }, []);
 
     return (
-        <div className={showHideClassName}>
+        <div className="modal display-block">
           <section className="modal__main column__center">
-            <img src={`${process.env.PUBLIC_URL}/icons/exit.svg`} onClick={()=> props.handleClose()} className="modal__exit" />
+            <img src={`${process.env.PUBLIC_URL}/icons/exit.svg`} onClick={handleClose} className="modal__exit" />
             <form onSubmit={submitHandler} className="modal__main-form">
               <div className="modal__top-form">
                 <div className="modal__form-item">
@@ -86,8 +86,9 @@ export default function AddIncExpTransaction(props) {
                     borderColor: focused == "organization"
                     ? '#1778E9' : '#848181'
                   }}
+                  required
                   onChange={(e) => getOrganization(e)}>
-                    <option value="default">Выберите организацию</option>
+                    <option value="">Выберите организацию</option>
                     {sections ? sections.map(({id, name}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
@@ -102,14 +103,14 @@ export default function AddIncExpTransaction(props) {
                 </div>
                 <div className="modal__form-item">
                   <label htmlFor="wallet">Кошелек</label>
-                  <select id="wallet" placeholder="Выберите кошелек"
+                  <select id="wallet" placeholder="Выберите кошелек" required
                   onFocus={() => handleFocus("wallet")} onBlur={handleBlur}
                   style={{
                     borderColor: focused == "wallet"
                     ? '#1778E9' : '#848181'
                   }}
                   onChange={(e) => getWallet(e)}>
-                    <option value="default">Выберите кошелек</option>
+                    <option value="">Выберите кошелек</option>
                     {wallets ? wallets.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
@@ -132,8 +133,9 @@ export default function AddIncExpTransaction(props) {
                     borderColor: focused == "category"
                     ? '#1778E9' : '#848181'
                   }}
+                  required
                   onChange={(e) => getCategoryId(e)}>
-                    <option value="default">Выберите категорию</option>
+                    <option value="">Выберите категорию</option>
                     {categories ? categories.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>

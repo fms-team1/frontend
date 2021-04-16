@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { getAllUsersReducer, getCurrentUserReducer, userSigninReducer } from "./reducers/userReducers";
 import thunk from "redux-thunk";
-import { addNewTransactionReducer, getAllCategoryReducer, getAllWalletReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
+import { addAccountantReducer, addNewTransactionReducer, changePasswordReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
 
 const initialState = {
     userSignin: {
@@ -19,9 +19,12 @@ const reducer = combineReducers({
     sectionList: getNeoSectionsReducer,
     filterList: getFilterListReducer,
     addTransaction: addNewTransactionReducer,
+    addAccountant: addAccountantReducer,
+    changePasswordResult: changePasswordReducer,
     currentUser: getCurrentUserReducer,
     allUsers: getAllUsersReducer,
-    walletList: getAllWalletReducer
+    walletList: getAllWalletReducer,
+    activeGroupList: getAllActiveGroupsReducer
 })
 
 const composeEnhanser = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

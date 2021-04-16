@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getAllUsers, getCurrentUser } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
-export default function UsersScreen({logOutButton, setLogOutButton}) {
+export default function UsersScreen() {
   const dispatch = useDispatch();
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -36,12 +37,11 @@ export default function UsersScreen({logOutButton, setLogOutButton}) {
                     </div>
                   ))}
                 </div>
-                <a href="#" className="users__add-user">
+                <Link to='/addAccountant' href="#" className="users__add-user">
                   <img src={`${process.env.PUBLIC_URL}/icons/add-icon.svg`} className="users__add-icon" />
                   <span>Добавить бухгалтера</span>
-                </a>
-              </> : null
-            }
+                </Link>
+              </> : null}
           </div>
         </div>
         <div className="users__block">
@@ -53,11 +53,10 @@ export default function UsersScreen({logOutButton, setLogOutButton}) {
             ) : currentUserData ?
             <>
               <div className="users__profile-title">
-                {/* {console.log(window.location.pathname === '/users')} */}
                 <img src={`${process.env.PUBLIC_URL}/icons/avatar.svg`} className="users__profile-icon" />
                 <div className="users__profile-info">
                   <span>{
-                  `${currentUserData.name} ${currentUserData.surname}( ${currentUserData.role.role === 'ROLE_ADMIN' ? 'суперадмин' : ''} )`
+                  `${currentUserData.name} ${currentUserData.surname} (${currentUserData.role.role})`
                   }</span>
                 </div>
               </div>
@@ -76,14 +75,14 @@ export default function UsersScreen({logOutButton, setLogOutButton}) {
                   <a href={`tel:${currentUserData.phoneNumber}`}>{currentUserData.phoneNumber}</a>
                 </div>
                 <div className="user__personal-info">
-                  <a href="#" className="user__personal-link">
+                  <Link to='/changePassword' href="#" className="user__personal-link">
                     <img src={`${process.env.PUBLIC_URL}/icons/password-icon.svg`} />
                     <span>Изменить пароль</span>
-                    <img src={`${process.env.PUBLIC_URL}/icons/arrow-link.svg`} /></a>
+                    <img src={`${process.env.PUBLIC_URL}/icons/arrow-link.svg`} />
+                  </Link>
                 </div>
               </div>
-            </> : null
-            }
+            </> : null}
           </div>
         </div>
       </div>

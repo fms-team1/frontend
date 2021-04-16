@@ -7,7 +7,7 @@ import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS,
         TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS,
         WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS,
         FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, FILTER_LIST_FAIL,
-        CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, SECTION_LIST_FAIL } from '../constants/transactionConstants';
+        CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, SECTION_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, GROUP_LIST_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_SUCCESS, ADD_ACCOUNTANT_FAIL, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAIL } from '../constants/transactionConstants';
 
 
 export const listLastTransactions = (token) => async (dispatch) => {
@@ -85,6 +85,56 @@ export const addIncExpTransaction = (token, summa, wallet, category, comment, co
         dispatch({ type: ADD_TRANSACTION_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: ADD_TRANSACTION_FAIL, payload: error.message });
+    }
+}
+export const addAccountant = (email, groupId, firstName, password, phoneNumber, surname) => async (dispatch, getState) => {
+    dispatch({
+        type: ADD_ACCOUNTANT_REQUEST
+    });
+    const {
+        userSignin: { userInfo }
+    } = getState();
+    try {
+        const { data } = await axios.post('https://neo-fms.herokuapp.com/registration/newAccountant',
+        {
+            email: email,
+            group_ids: [groupId], 
+            name: firstName,
+            password: password,
+            phoneNumber: phoneNumber,
+            surname: surname
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: ADD_ACCOUNTANT_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: ADD_ACCOUNTANT_FAIL, payload: error.message });
+    }
+}
+export const changePassword = (newPassword, oldPassword) => async (dispatch, getState) => {
+    dispatch({
+        type: CHANGE_PASSWORD_REQUEST
+    });
+    const {
+        userSignin: { userInfo }
+    } = getState();
+    try {
+        const { data } = await axios.put('https://neo-fms.herokuapp.com/user/changePassword',
+        {
+            newPassword: newPassword,
+            oldPassword: oldPassword
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: CHANGE_PASSWORD_FAIL, payload: error.message });
     }
 }
 export const listPeriodTransactions = (token, period) => async (dispatch) => {
@@ -234,5 +284,23 @@ export const getAllWallet = (token) => async (dispatch) => {
         dispatch({ type: WALLET_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: WALLET_LIST_FAIL, payload: error.message });
+    }
+}
+export const getAllActiveGroups = () => async (dispatch, getState) => {
+    dispatch({
+        type: GROUP_LIST_REQUEST
+    });
+    const {
+        userSignin: { userInfo }
+    } = getState();
+    try {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/group/getAllActiveGroups', {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: GROUP_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: GROUP_LIST_FAIL, payload: error.message });
     }
 }

@@ -314,6 +314,7 @@ input[type=submit] {
 
 /* Alert */
 .loader-container {
+  width: 80%;
   margin: 1% auto;
   text-align: center;
 }
@@ -452,7 +453,7 @@ input[type=submit] {
 .home__content-buttons {
   margin: 5% 0;
 }
-.home__content-buttons button {
+.home__content-buttons a {
   padding: 3% 7% 3% 5%;
   background-color: #fff;
   border-radius: 8px;
@@ -576,7 +577,7 @@ td {
 }
 .users__block {
   margin-top: 5%;
-  min-width: 40%;
+  width: 40%;
   height: fit-content;
   background: #FFFFFF;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
@@ -613,6 +614,9 @@ td {
   color: #1076ED;
 }
 .users__add-user img {
+  margin-right: 3%;
+}
+.users__profile-icon {
   margin-right: 3%;
 }
 .users__profile-info {
@@ -703,8 +707,17 @@ td {
   .customNavLink--active {
     color: #1778E9;
   }
-  .home__content-buttons button {
+  .home__content-buttons a {
     font-size: 100%;
+  }
+  .users__content {
+    flex-wrap: wrap-reverse;
+  }
+  .users__block {
+    width: 80%;
+  }
+  .users__block-body {
+    padding: 6% 6%;
   }
 }
 
@@ -790,7 +803,7 @@ td {
     font-size: 16px;
     line-height: 19px;
   }
-  .home__content-buttons button {
+  .home__content-buttons a {
     font-size: 80%;
   }
   .transaction__title-block {
@@ -851,6 +864,27 @@ td {
   .transaction__transfer {
     color: #3B3BB7;
   }
+  .users__block {
+    width: 90%;
+  }
+  .users__block-header {
+    font-size: 18px;
+  }
+  .users__list {
+    font-size: 16px;
+  }
+  .users__add-user {
+    font-size: 17px;
+  }
+  .users__profile-info {
+    font-size: 18px;
+  }
+  .user__personal-data {
+    font-size: 15px;
+  }
+  .user__personal-info {
+    font-size: 15px;
+  }
 }
 
 @media only screen and (max-width: 425px) {
@@ -873,7 +907,7 @@ td {
     font-size: 14px;
     line-height: 16px;
   }
-  .home__content-buttons button {
+  .home__content-buttons a {
     padding: 2% 4% 2% 3%;
     font-size: 72%;
   }
@@ -908,5 +942,17 @@ td {
   }
   .signin__form {
     width: 95%;
+  }
+  .users__profile-info {
+    font-size: 16px;
+  }
+  .user__personal-data {
+    font-size: 13px;
+  }
+  .user__personal-info {
+    font-size: 14px;
+  }
+  .user__personal-link { 
+    font-size: 13px;
   }
 }

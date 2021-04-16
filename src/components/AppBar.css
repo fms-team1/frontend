@@ -55,6 +55,10 @@
   .burger-menu__block {
     width: 25%;
   }
+  .search-bar__block {
+    margin-left: 25%;
+    width: 75%;
+  }
   .profile-surname {
     display: none;
   }
@@ -71,8 +75,8 @@
   .profile-bar {
     display: none;
   }
-  .users__profile-exit {
-    display: none;
+  .profile-bar__exit {
+    display: none !important;
   }
   .profile__user {
     display: block;
@@ -148,8 +152,7 @@
     margin: 3% 0 0 5%;
   }
 }
-@media only screen and (max-width: 425px) {
-  
+@media only screen and (max-width: 425px) { 
   .search-bar__block {
     width: 100%;
     justify-content: flex-end;
