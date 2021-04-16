@@ -7,12 +7,14 @@ export default function RegisterScreen() {
         <section className="register">
             <div className="container">
                 <div className="register__content column">
-                    <div className="register__signin">
-                        <div>Есть аккаунт?</div>
-                        <NavLink className="register__signin-btn" to="/signin">Войти</NavLink>
+                    <div className="signin__block">
+                        <img src={`${process.env.PUBLIC_URL}/web-analytics 1.svg`} alt="web-analytics"/>
                     </div>
-                    <div className="register__form default-input default-label">
-                        <img src={`${process.env.PUBLIC_URL}/logoFN.svg`} alt="icon" className="register__icon"/>
+                    <div className="register__form">
+                        <div className="signin__icon">
+                            <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="icon"/>
+                            <div className="signin__icon-title">NeoFin</div>
+                        </div>
                         <form onSubmit={() => alert("Hi")}>
                             <div className="register__form-item">
                                 <label htmlFor="surname">Фамилия</label>

@@ -6,7 +6,10 @@ import {
     USER_SIGNOUT,
     GET_CURRENT_USER_FAIL,
     GET_CURRENT_USER_SUCCESS,
-    GET_CURRENT_USER_REQUEST
+    GET_CURRENT_USER_REQUEST,
+    GET_ALL_USERS_REQUEST,
+    GET_ALL_USERS_SUCCESS,
+    GET_ALL_USERS_FAIL
  } from "../constants/userConstants"
 
 export const signin = (email, password, rememberMe) => async (dispatch) => {
@@ -41,7 +44,7 @@ export const signin = (email, password, rememberMe) => async (dispatch) => {
 export const signout = () => (dispatch) => {
     localStorage.removeItem('userToken');
     dispatch({ type: USER_SIGNOUT });
-    document.location.href = '/signin';
+    // document.location.href = '/signin';
 }
 
 export const getCurrentUser = (token) => async (dispatch) => {
@@ -57,5 +60,21 @@ export const getCurrentUser = (token) => async (dispatch) => {
         dispatch({ type: GET_CURRENT_USER_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: GET_CURRENT_USER_FAIL, payload: error.message });
+    }
+}
+
+export const getAllUsers = (token) => async (dispatch) => {
+    dispatch({
+        type: GET_ALL_USERS_REQUEST
+    });
+    try {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/user/getAllUsers', {
+            headers: {
+                'Authorization': `Bearer ${token.jwt}`
+            }
+        });
+        dispatch({ type: GET_ALL_USERS_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: GET_ALL_USERS_FAIL, payload: error.message });
     }
 }

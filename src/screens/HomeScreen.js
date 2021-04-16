@@ -9,6 +9,7 @@ import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
 import AddIncExpTransaction from '../components/AddIncExpTransaction';
 import AddTransTransaction from '../components/AddTransTransaction';
 import { signout } from '../actions/userActions';
+import { Link } from 'react-router-dom';
 
 export default function HomeScreen(props) {
     const dispatch = useDispatch();
@@ -125,7 +126,7 @@ export default function HomeScreen(props) {
                         <div className="home__filter-adaptive">
                             <div onClick={(e) => {
                               setCustomActive(3)
-                              filterByTime(e)}} 
+                              filterByTime(e)}}
                               className={`customNavLink ${customActive === 3 ? 'customNavLink--active' : ''}` }>
                               Год
                             </div>
@@ -156,21 +157,19 @@ export default function HomeScreen(props) {
                                 </tbody>
                             </table>
                         </div>
-                        <AddIncExpTransaction show={showIncExp} handleClose={hideModal} />
-                        <AddTransTransaction show={showTrans} handleClose={hideModal} />
                         <div className="home__content-buttons column__space-between">
-                            <button onClick={showModal} className="home__button-income">
-                                <img src={`${process.env.PUBLIC_URL}/icons/income.svg`} />
+                            <Link to='/addTransaction' className="home__button-income">
+                                <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} />
                                 <div>Доход</div>
-                            </button>
-                            <button onClick={showModal} className="home__button-expense">
-                                <img src={`${process.env.PUBLIC_URL}/icons/expense.svg`} /> 
+                            </Link>
+                            <Link to='/addTransaction' className="home__button-expense">
+                                <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> 
                                 <div>Расход</div>
-                            </button>
-                            <button onClick={showTransferModal} className="home__button-transfer">
-                                <img src={`${process.env.PUBLIC_URL}/icons/transfer.svg`} />
+                            </Link>
+                            <Link to='/addTransferTransaction' className="home__button-transfer">
+                                <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} />
                                 <div>Перевод</div>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                     <div className="transaction__block">

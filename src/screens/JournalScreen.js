@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getByNeoSection, getFilterList, getJournalList } from '../actions/transactionActions';
+import { getAllCategory, getCategoriesByNeoSection, getFilterTypeList, getJournalList } from '../actions/transactionActions';
 import { signout } from '../actions/userActions';
 import Dropdown from '../components/Dropdown';
+import DropdownByPeriod from '../components/DropdownByPeriod';
+import SearchInput from '../components/SearchInput';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
@@ -15,27 +17,23 @@ export default function JournalScreen() {
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
 
+  const [neoSectionId, setNeoSectionId] = useState(null);
+  const [operation, setOperation] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [startPeriod, setStartPeriod] = useState(null);
+  const [endPeriod, setEndPeriod] = useState(null);
+  const [wallet, setWallet] = useState(null);
+  const [counterparty, setCounterparty] = useState(null);
+  const [users, setUsers] = useState(null);
+
   const listJournal = useSelector((state) => state.listJournal);
   const { loading, error, transactions } = listJournal;
+  const categoryList = useSelector((state) => state.categoryList);
+  const { categories } = categoryList;
   const filterList = useSelector((state) => state.filterList);
   const { loadingFilter, errorFilter, filterTypeList } = filterList;
 
   const [media, setMedia] = useState(false);
-
-  const items = [
-    {
-      id: 1,
-      value: 'Неделя',
-    },
-    {
-      id: 2,
-      value: 'Месяц',
-    },
-    {
-      id: 3,
-      value: 'Год',
-    },
-  ];
 
   useEffect(() => {
     let mounted = true;
@@ -57,20 +55,18 @@ export default function JournalScreen() {
       else setMedia(false);
         return mountedd = false;
       });
-
       return () => mounted = false;
 
     }, [window.matchMedia("(max-width: 620px)").matches]);
 
-  const submitHandler = (e, section) => {
-    if(section === 'NEOBIS') {
-      dispatch(getByNeoSection(userInfo, section));
-    }
-    else if(section === 'NEOLABS') {
-      dispatch(getByNeoSection(userInfo, section));
+  const submitHandler = (neoSectionId = -1) => {
+    if(neoSectionId === -1) {
+      setNeoSectionId(null);
+      dispatch(getAllCategory(userInfo));
     }
     else {
-      dispatch(getJournalList(userInfo));
+      setNeoSectionId(neoSectionId);
+      dispatch(getCategoriesByNeoSection(userInfo, neoSectionId));
     }
   }
 
@@ -78,22 +74,23 @@ export default function JournalScreen() {
     if(error && error.indexOf("403") !== -1) {
       dispatch(signout());
     }
-    dispatch(getJournalList(userInfo));
-    dispatch(getFilterList(userInfo));
-}, []);
+    dispatch(getJournalList(neoSectionId, operation, category, startPeriod, endPeriod, wallet, counterparty, users));
+}, [neoSectionId, operation, category, endPeriod, wallet, counterparty, users]);
+
+  useEffect(() => {
+    if(errorFilter && errorFilter.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+    dispatch(getFilterTypeList(userInfo));
+    dispatch(getAllCategory(userInfo));
+  }, [])
 
 
   return (
     <section className='journal'>
-      {loading ? (
-      <LoadingBox></LoadingBox>
-      ) : error ? (
-      <MessageBox varinat="danger">{error}</MessageBox>
-      ) : (
-      <>
-      <div className="journal__top-block">
+            <div className="journal__top-block">
         <nav className='journal__navbar'>
-          <NavLink activeClassName="journal__link--active" className="journal__link" to="/journal/neobis" onClick={(e) => submitHandler(e, "NEOBIS")}>
+          <NavLink activeClassName="journal__link--active" className="journal__link" to="/journal/neobis" onClick={() => submitHandler(filterTypeList[2].data[0].id)}>
             <svg height="18" viewBox="20 2 80 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M89.938 10.04H100.549C100.611 9.68824 100.641 9.33191 100.64 8.97499V7.91004H89.938C89.8495 8.25836 89.8029 8.61589 89.8006 8.97499C89.8037 9.33408 89.8495 9.69161 89.938 10.04ZM100.625 8.97499V7.91004H100.533C100.595 8.26181 100.626 8.61806 100.625 8.97499ZM87.709 10.04H89.938C89.8495 9.69161 89.8037 9.33408 89.8006 8.97499C89.8029 8.61589 89.8495 8.25836 89.938 7.91004H87.7243C87.6121 8.61581 87.6121 9.33431 87.7243 10.04H87.709ZM94.1212 4.71504C95.1777 4.71586 96.1983 5.09435 96.9915 5.77998H99.7548C99.0854 4.64079 98.0747 3.73226 96.8609 3.17842C95.6464 2.62457 94.2877 2.45242 92.9701 2.6854C91.6525 2.91838 90.4403 3.54515 89.4983 4.4802C88.5571 5.41525 87.9319 6.61309 87.709 7.91004H89.938C90.177 7.00175 90.7136 6.19618 91.4663 5.61847C92.2182 5.04078 93.1434 4.72324 94.0983 4.71504H94.1212ZM91.2587 12.17H88.4877C89.1594 13.3053 90.1709 14.21 91.3846 14.761C92.5976 15.3121 93.9541 15.4829 95.2701 15.2503C96.5854 15.0177 97.7961 14.3928 98.738 13.4607C99.68 12.5286 100.307 11.3343 100.533 10.04H98.335C98.151 10.7457 97.7861 11.3932 97.2739 11.9203C96.7625 12.4475 96.1212 12.8366 95.4121 13.0503C94.7037 13.2642 93.951 13.2955 93.2258 13.1414C92.5014 12.9872 91.8289 12.6527 91.2739 12.17H91.2587Z" fill="currentColor"/>
               <path fillRule="evenodd" clipRule="evenodd" d="M48.4647 7.90994H40.0677C39.9752 8.25757 39.929 8.61554 39.9303 8.97487C39.9294 9.33419 39.9756 9.69217 40.0677 10.0399H48.4647C48.5505 9.69119 48.5941 9.33367 48.5945 8.97487C48.5946 8.61607 48.551 8.25862 48.4647 7.90994ZM44.2662 4.71494C44.8353 4.71493 45.3987 4.82513 45.9243 5.03931C46.4499 5.25349 46.9275 5.5674 47.3295 5.96308C47.7314 6.35875 48.0501 6.82844 48.2672 7.34525C48.4843 7.86205 48.5955 8.41582 48.5945 8.97487C48.5941 9.33367 48.5505 9.69119 48.4647 10.0399H50.6785C50.7335 9.68752 50.7616 9.33142 50.7624 8.97487C50.8234 8.10097 50.701 7.22398 50.4025 6.3985C50.1041 5.57302 49.6361 4.81663 49.0276 4.17634C48.4191 3.53604 47.6831 3.02557 46.8653 2.67652C46.0476 2.32747 45.1655 2.14734 44.2738 2.14734C43.3822 2.14734 42.5002 2.32747 41.6824 2.67652C40.8646 3.02557 40.1286 3.53604 39.5201 4.17634C38.9116 4.81663 38.4436 5.57302 38.1452 6.3985C37.8467 7.22398 37.7243 8.10097 37.7853 8.97487C37.7848 9.33179 37.8154 9.68812 37.8769 10.0399H40.0907C39.9985 9.69217 39.9524 9.33419 39.9533 8.97487C39.9532 7.84895 40.4069 6.76885 41.2151 5.97058C42.0233 5.17232 43.1202 4.72088 44.2662 4.71494ZM44.2662 13.2349C43.3049 13.235 42.3709 12.9212 41.6109 12.3428C40.8509 11.7645 40.3081 10.9544 40.0677 10.0399H37.854C38.0788 11.3347 38.7042 12.5299 39.6451 13.463C40.5861 14.396 41.7968 15.0215 43.1125 15.2543C44.4282 15.4871 45.785 15.316 46.9981 14.764C48.2112 14.2121 49.2218 13.3063 49.8921 12.1699H47.1288C46.3389 12.8562 45.3207 13.235 44.2662 13.2349Z" fill="currentColor"/>
@@ -103,12 +100,12 @@ export default function JournalScreen() {
               <path fillRule="evenodd" clipRule="evenodd" d="M24.7627 15.3575V13.7375C24.0802 13.1385 23.5344 12.4046 23.1608 11.5839C22.7872 10.7631 22.5943 9.87409 22.5948 8.97499V15.3575H24.7627ZM24.7627 8.97499C24.7627 7.84519 25.2195 6.76165 26.0326 5.96274C26.8457 5.16383 27.9486 4.71506 29.0985 4.71506C30.2485 4.71506 31.3513 5.16383 32.1644 5.96274C32.9776 6.76165 33.4344 7.84519 33.4344 8.97499V13.7375C34.4162 12.8748 35.1082 11.7395 35.4189 10.4819C35.7296 9.22421 35.6442 7.90356 35.1742 6.69461C34.7042 5.48566 33.8717 4.44544 32.7868 3.71155C31.7019 2.97766 30.4157 2.58472 29.0985 2.58472C27.7813 2.58472 26.4952 2.97766 25.4102 3.71155C24.3254 4.44544 23.4928 5.48566 23.0228 6.69461C22.5528 7.90356 22.4676 9.22421 22.7782 10.4819C23.0889 11.7395 23.7809 12.8748 24.7627 13.7375V8.97499ZM33.4497 13.7375V15.3575H35.61V8.97499C35.6114 9.87349 35.4197 10.7622 35.0474 11.5829C34.6751 12.4036 34.1307 13.1378 33.4497 13.7375Z" fill="currentColor"/>
             </svg>
           </NavLink>
-          <NavLink exact activeClassName="journal__link--active" className="journal__link" to="/journal"  onClick={(e) => submitHandler(e, "ALL")}>
-          <svg width="21" height="14" viewBox="0 0 21 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M11.7332 7.28373V13.3272H9.85407V11.7237C9.65741 11.92 9.44837 12.1018 9.22724 12.2666C8.29853 12.9593 7.20685 13.3282 6.09015 13.3272C5.34943 13.3284 4.61567 13.1665 3.93091 12.8504C3.24622 12.5342 2.62397 12.0703 2.10035 11.4849C1.5763 10.8997 1.16053 10.2046 0.87769 9.43973C0.594792 8.67484 0.450383 7.85502 0.451298 7.02714C0.450383 5.77958 0.780461 4.55985 1.40039 3.52225C2.02027 2.48466 2.90131 1.67557 3.9328 1.19779C4.96424 0.720008 6.09943 0.59452 7.19483 0.837684C8.28974 1.08085 9.29572 1.68143 10.0856 2.56351C10.8749 3.44559 11.4124 4.56962 11.63 5.79325C11.7177 6.28641 11.7518 6.78666 11.7332 7.28373ZM11.7332 7.28373V7.04935C11.7318 7.9285 11.5653 8.79764 11.2439 9.60013C11.2655 9.54618 11.287 9.49198 11.3073 9.43729C11.5627 8.7493 11.7058 8.02006 11.7332 7.28373ZM9.21979 9.36356C9.63324 8.67191 9.85407 7.85892 9.85407 7.02714H9.83558C9.83558 5.91557 9.44159 4.84891 8.73975 4.06083C8.03785 3.27299 7.08509 2.82743 6.09015 2.82206C5.34577 2.82206 4.61799 3.06864 3.99897 3.5308C3.38001 3.99271 2.89759 4.64945 2.61243 5.41801C2.3277 6.18632 2.25361 7.03178 2.3985 7.84745C2.54389 8.66337 2.90223 9.41263 3.42859 10.0008C3.95502 10.5889 4.62586 10.9893 5.3559 11.1516C6.086 11.3138 6.84296 11.2305 7.53046 10.9124C8.21845 10.594 8.80591 10.055 9.21979 9.36356ZM20.0533 0.716834H18.1737V13.3221H20.0533V0.716834ZM15.8957 0.721961H14.0161V13.3272H15.8957V0.721961Z" fill="currentColor"/>
-          </svg>
+          <NavLink exact activeClassName="journal__link--active" className="journal__link" to="/journal"  onClick={() => submitHandler()}>
+            <svg width="21" height="14" viewBox="0 0 21 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M11.7332 7.28373V13.3272H9.85407V11.7237C9.65741 11.92 9.44837 12.1018 9.22724 12.2666C8.29853 12.9593 7.20685 13.3282 6.09015 13.3272C5.34943 13.3284 4.61567 13.1665 3.93091 12.8504C3.24622 12.5342 2.62397 12.0703 2.10035 11.4849C1.5763 10.8997 1.16053 10.2046 0.87769 9.43973C0.594792 8.67484 0.450383 7.85502 0.451298 7.02714C0.450383 5.77958 0.780461 4.55985 1.40039 3.52225C2.02027 2.48466 2.90131 1.67557 3.9328 1.19779C4.96424 0.720008 6.09943 0.59452 7.19483 0.837684C8.28974 1.08085 9.29572 1.68143 10.0856 2.56351C10.8749 3.44559 11.4124 4.56962 11.63 5.79325C11.7177 6.28641 11.7518 6.78666 11.7332 7.28373ZM11.7332 7.28373V7.04935C11.7318 7.9285 11.5653 8.79764 11.2439 9.60013C11.2655 9.54618 11.287 9.49198 11.3073 9.43729C11.5627 8.7493 11.7058 8.02006 11.7332 7.28373ZM9.21979 9.36356C9.63324 8.67191 9.85407 7.85892 9.85407 7.02714H9.83558C9.83558 5.91557 9.44159 4.84891 8.73975 4.06083C8.03785 3.27299 7.08509 2.82743 6.09015 2.82206C5.34577 2.82206 4.61799 3.06864 3.99897 3.5308C3.38001 3.99271 2.89759 4.64945 2.61243 5.41801C2.3277 6.18632 2.25361 7.03178 2.3985 7.84745C2.54389 8.66337 2.90223 9.41263 3.42859 10.0008C3.95502 10.5889 4.62586 10.9893 5.3559 11.1516C6.086 11.3138 6.84296 11.2305 7.53046 10.9124C8.21845 10.594 8.80591 10.055 9.21979 9.36356ZM20.0533 0.716834H18.1737V13.3221H20.0533V0.716834ZM15.8957 0.721961H14.0161V13.3272H15.8957V0.721961Z" fill="currentColor"/>
+            </svg>
           </NavLink>
-          <NavLink activeClassName="journal__link--active" className="journal__link" to="/journal/neolabs" onClick={(e) => submitHandler(e, "NEOLABS")}>
+          <NavLink activeClassName="journal__link--active" className="journal__link" to="/journal/neolabs" onClick={() => submitHandler(filterTypeList[2].data[1].id)}>
             <svg height="18" viewBox="20 2 80 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M91.4562 10.1539H100.66C100.711 9.81209 100.737 9.4661 100.739 9.11945V8.08497H91.4793C91.3187 8.77352 91.3187 9.49647 91.4793 10.185L91.4562 10.1539ZM100.739 9.15048V8.116H100.66C100.715 8.44202 100.747 8.77233 100.757 9.10398L100.739 9.15048ZM89.5349 10.185H91.4562C91.2955 9.49647 91.2955 8.77352 91.4562 8.08497H89.5349C89.4298 8.78009 89.4298 9.4899 89.5349 10.185ZM95.0904 4.92981C96.0039 4.92468 96.8881 5.29255 97.5765 5.96428H99.9742C99.3927 4.8416 98.5159 3.94657 97.4626 3.40123C96.4089 2.85589 95.2307 2.68679 94.0881 2.91698C92.946 3.14717 91.8946 3.76545 91.0784 4.68752C90.2617 5.60959 89.7196 6.79057 89.5256 8.0695H91.4464C91.652 7.16169 92.1233 6.3566 92.7849 5.78216C93.4469 5.20767 94.2617 4.89675 95.0997 4.89878L95.0904 4.92981ZM92.5997 12.285H90.2015C90.7826 13.4076 91.6594 14.3028 92.7127 14.8484C93.7654 15.394 94.9432 15.5636 96.0858 15.3339C97.2284 15.1043 98.2793 14.4868 99.0964 13.5653C99.9131 12.6439 100.456 11.4635 100.65 10.185H98.7293C98.5677 10.8801 98.2492 11.5175 97.8048 12.0363C97.3603 12.555 96.8043 12.938 96.19 13.1485C95.5752 13.3591 94.9224 13.3903 94.2941 13.2391C93.6654 13.0879 93.0821 12.7595 92.5997 12.285Z" fill="currentColor"/>
               <path fillRule="evenodd" clipRule="evenodd" d="M42.3266 8.0539H35.044C34.8834 8.7424 34.8834 9.4654 35.044 10.1539H42.3266C42.4872 9.4654 42.4872 8.7424 42.3266 8.0539ZM38.6876 4.89873C39.685 4.9001 40.6412 5.34375 41.346 6.13225C42.0509 6.92068 42.4469 7.9895 42.4469 9.1039C42.446 9.45304 42.4057 9.80063 42.3266 10.1384H44.2481C44.2994 9.79649 44.3257 9.45056 44.3268 9.1039C44.3484 8.26106 44.2185 7.42188 43.9447 6.63614C43.671 5.85035 43.2586 5.13391 42.7326 4.5292C42.2067 3.92449 41.5778 3.44378 40.8826 3.11553C40.1874 2.78728 39.4401 2.61816 38.6853 2.61816C37.9306 2.61816 37.1837 2.78728 36.4885 3.11553C35.7933 3.44378 35.164 3.92449 34.638 4.5292C34.112 5.13391 33.7001 5.85035 33.4263 6.63614C33.1526 7.42188 33.0227 8.26106 33.0443 9.1039C33.0454 9.45056 33.0717 9.79649 33.123 10.1384H35.044C34.965 9.80063 34.9246 9.45304 34.9238 9.1039C34.9238 7.98863 35.3206 6.91902 36.0264 6.13038C36.7323 5.34177 37.6894 4.89873 38.6876 4.89873ZM38.6876 13.3039C37.8538 13.3039 37.0435 12.9946 36.3841 12.4244C35.7246 11.8543 35.2532 11.0557 35.044 10.1539H33.123C33.3175 11.4324 33.86 12.6129 34.6769 13.5343C35.4938 14.4557 36.5451 15.0733 37.6875 15.3029C38.83 15.5325 40.0082 15.3629 41.0612 14.8173C42.1142 14.2717 42.9911 13.3765 43.5722 12.2539H41.1738C40.4876 12.9313 39.6032 13.3047 38.6876 13.3039Z" fill="currentColor"/>
@@ -121,46 +118,20 @@ export default function JournalScreen() {
           </NavLink>
         </nav>
         <div className="journal__filter">
-          {/* <Dropdown title="Операция" items={filterTypeList && filterTypeList[1].data} multiSelect /> */}
-          <Dropdown title="Период" items={items} multiSelect calendarIcon />
-          <div className="journal__filter-item">
-            <select className="journal__filter-select">
-              <option value="week">Категория</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
-          <div className="journal__filter-item">
-            <div className="journal__filter-icon"></div>
-            <select className="journal__filter-select">
-              <option value="week">Период</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
-          <div className="journal__filter-item">
-            <select className="journal__filter-select">
-              <option value="week">Кошелок</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
-          <div className="journal__filter-item">
-            <select className="journal__filter-select">
-              <option value="week">Котрагент</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
-          <div className="journal__filter-item">
-            <select className="journal__filter-select">
-              <option value="week">Пользователь</option>
-              <option value="month">месяц</option>
-              <option value="year">год</option>
-            </select>
-          </div>
+          <Dropdown state={operation} setState={setOperation} title="Операция" items={filterTypeList ? filterTypeList[1].data : null} dropdownType="operations" />
+          <Dropdown state={category} setState={setCategory}  title="Категория" items={categories ? categories : []} dropdownType="categories" />
+          <DropdownByPeriod start={startPeriod} end={endPeriod} setStart={setStartPeriod} setEnd={setEndPeriod}  title="Период" />
+          <Dropdown state={wallet} setState={setWallet}  title="Кошелек" items={filterTypeList ? filterTypeList[0].data : null} dropdownType="wallets" />
+          <SearchInput state={counterparty} setState={setCounterparty}  title="Контрагент" items={filterTypeList ? filterTypeList[4].data : null} />
+          <Dropdown state={users} setState={setUsers}  title="Пользователь" items={filterTypeList ? filterTypeList[3].data : null} dropdownType="users" />
         </div>
       </div>
+      {loading ? (
+      <LoadingBox></LoadingBox>
+      ) : error ? (
+      <MessageBox varinat="danger">{error}</MessageBox>
+      ) : (
+      <>
       <div className="transaction__block">
         {media ? 
         (<>

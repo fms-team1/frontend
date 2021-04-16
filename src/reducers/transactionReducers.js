@@ -1,4 +1,4 @@
-import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, FILTER_LIST_FAIL, FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, SECTION_LIST_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS } from "../constants/transactionConstants";
+import { ADD_ACCOUNTANT_RESET, ADD_ACCOUNTANT_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_SUCCESS, ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, FILTER_LIST_FAIL, FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, GROUP_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, SECTION_LIST_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS, ADD_TRANSACTION_RESET, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_RESET } from "../constants/transactionConstants";
 
 export const lastListTransactionReducer = (
     state = { loading: true, transactions: [] },
@@ -41,7 +41,7 @@ export const getJournalListReducer = (
         case JOURNAL_LIST_SUCCESS:
             return {
                 loading: false,
-                transactions: action.payload.content
+                transactions: action.payload
             };
         case JOURNAL_LIST_FAIL:
             return { loading: false, error: action.payload };
@@ -53,6 +53,33 @@ export const getJournalListReducer = (
                 transactions: action.payload
             };
         case JOURNAL_BY_SECTION_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+export const getCategoryListReducer = (
+    state = { loading: true, categories: [] },
+    action
+) => {
+    switch (action.type) {
+        case CATEGORY_LIST_REQUEST:
+            return { loading: true };
+        case CATEGORY_LIST_SUCCESS:
+            return {
+                loading: false,
+                categories: action.payload
+            };
+        case CATEGORY_LIST_FAIL:
+            return { loading: false, error: action.payload };
+        case CATEGORIES_BY_SECTION_REQUEST:
+            return { loading: true };
+        case CATEGORIES_BY_SECTION_SUCCESS:
+            return {
+                loading: false,
+                categories: action.payload
+            };
+        case CATEGORY_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
             return state;
@@ -132,6 +159,24 @@ export const getAllWalletReducer = (
             return state;
     }
 };
+export const getAllActiveGroupsReducer = (
+    state = { groupsLoading: true, activeGroups: [] },
+    action
+) => {
+    switch (action.type) {
+        case GROUP_LIST_REQUEST:
+            return { groupsLoading: true };
+        case GROUP_LIST_SUCCESS:
+            return {
+                groupsLoading: false,
+                activeGroups: action.payload
+            };
+        case GROUP_LIST_FAIL:
+            return { groupsLoading: false, groupsError: action.payload };
+        default:
+            return state;
+    }
+};
 export const addNewTransactionReducer = ( state = {}, action ) => {
     switch (action.type) {
         case ADD_TRANSACTION_REQUEST:
@@ -143,6 +188,42 @@ export const addNewTransactionReducer = ( state = {}, action ) => {
             };
         case ADD_TRANSACTION_FAIL:
             return { loadingAdd: false, errorAdd: action.payload };
+        case ADD_TRANSACTION_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const addAccountantReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case ADD_ACCOUNTANT_REQUEST:
+            return { loadingAdd: true };
+        case ADD_ACCOUNTANT_SUCCESS:
+            return {
+                loadingAdd: false,
+                messageAdd: action.payload
+            };
+        case ADD_ACCOUNTANT_FAIL:
+            return { loadingAdd: false, errorAdd: action.payload };
+        case ADD_ACCOUNTANT_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const changePasswordReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case CHANGE_PASSWORD_REQUEST:
+            return { loadingChangePassword: true };
+        case CHANGE_PASSWORD_SUCCESS:
+            return {
+                loadingChangePassword: false,
+                messageChangePassword: action.payload
+            };
+        case CHANGE_PASSWORD_FAIL:
+            return { loadingChangePassword: false, errorChangePassword: action.payload };
+        case CHANGE_PASSWORD_RESET:
+            return {};
         default:
             return state;
     }
