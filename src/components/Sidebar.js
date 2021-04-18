@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-export default function Sidebar({setLogOutButton, state, setState}) {
+export default function Sidebar({state, setState}) {
 
     const [media, setMedia] = useState(false);
 
@@ -35,7 +35,6 @@ export default function Sidebar({setLogOutButton, state, setState}) {
                         activeClassName="navbar__link--active"
                         className="navbar__link"
                         to="/"
-                        onClick={() => setLogOutButton(false)}
                     >
                         <div className="navbar__link-icon">
                             <svg fill="currentColor" baseProfile="tiny" width="28" height="28" version="1.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/1999/xlink">
@@ -48,7 +47,6 @@ export default function Sidebar({setLogOutButton, state, setState}) {
                         activeClassName="navbar__link--active"
                         className="navbar__link"
                         to="/journal"
-                        onClick={() => setLogOutButton(false)}
                     >
                         <div className="navbar__link-icon">
                             <svg width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -61,7 +59,6 @@ export default function Sidebar({setLogOutButton, state, setState}) {
                         activeClassName="navbar__link--active"
                         className="navbar__link"
                         to="/analytics"
-                        onClick={() => setLogOutButton(false)}
                         >
                         <div className="navbar__link-icon">
                             <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +73,6 @@ export default function Sidebar({setLogOutButton, state, setState}) {
                         activeClassName="navbar__link--active"
                         className="navbar__link"
                         to="/users"
-                        onClick={() => setLogOutButton(true)}
                         >
                         <div className="navbar__link-icon">
                             <svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -92,4 +88,4 @@ export default function Sidebar({setLogOutButton, state, setState}) {
             </div>
         </div>
     )
-}
+};

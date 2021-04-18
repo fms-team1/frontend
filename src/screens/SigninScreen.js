@@ -82,6 +82,9 @@ export default function SigninScreen(props) {
                             <div className="signin__forgot-pwd">
                                 <NavLink to="/">Забыли пароль?</NavLink>
                             </div>
+                            <Link to='/register' href="#" className="users__add-user">
+                                <span>Заполнение форм</span>
+                            </Link>
                         </form>
                     </>}
                     </div>

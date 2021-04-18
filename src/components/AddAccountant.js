@@ -8,6 +8,8 @@ import { ADD_ACCOUNTANT_RESET } from '../constants/transactionConstants';
 
 export default function AddAccountant(props) {
 
+  const dispatch = useDispatch();
+
   const activeGroupsList = useSelector((state) => state.activeGroupList);
   const { activeGroups } = activeGroupsList;
   const addNewAccountant = useSelector((state) => state.addAccountant);
@@ -24,8 +26,6 @@ export default function AddAccountant(props) {
   const [isPasswordShown, changePasswordShown] = useState(false);
   
   const [focused, setFocused] = useState("");
-
-  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
