@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllUsers, getCurrentUser } from '../actions/userActions';
+import { getAllUsers, getCurrentUser, signout } from '../actions/userActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 
@@ -14,6 +14,11 @@ export default function UsersScreen() {
   const allUsers = useSelector((state) => state.allUsers);
   const { loadingAllUsers, errorAllUsers, allUsersData } = allUsers;
 
+  const signoutHandler = () => {  
+    dispatch(signout());
+    // setLogOutButton(false);
+};
+
   useEffect(() => {
     dispatch(getCurrentUser(userInfo));
     dispatch(getAllUsers(userInfo));
@@ -21,6 +26,10 @@ export default function UsersScreen() {
 
   return (
     <div className='users'>
+      <Link to='/signin' className="users__profile-exit" onClick={signoutHandler}>
+        <img src={`${process.env.PUBLIC_URL}/icons/logOut.svg`} className="users__exit-icon" />
+        <div>Выйти</div>
+      </Link>
       <div className="users__content">
         <div className="users__block">
           <div className="users__block-header">Пользователи</div>
@@ -56,7 +65,7 @@ export default function UsersScreen() {
                 <img src={`${process.env.PUBLIC_URL}/icons/avatar.svg`} className="users__profile-icon" />
                 <div className="users__profile-info">
                   <span>{
-                  `${currentUserData.name} ${currentUserData.surname} (${currentUserData.role.role})`
+                  `${currentUserData.name} ${currentUserData.surname}`
                   }</span>
                 </div>
               </div>

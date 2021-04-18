@@ -1,7 +1,48 @@
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllActiveGroups } from '../actions/transactionActions';
 
 export default function RegisterScreen() {
+
+    const dispatch = useDispatch();
+
+    const activeGroupsList = useSelector((state) => state.activeGroupList);
+    const { activeGroups } = activeGroupsList;
+
+    const [focused, setFocused] = useState("");
+
+    const [firstName, setFirstName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [groupId, setGroupId] = useState(0);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [callingCode, setCallingCode] = useState('+996');
+
+    const handleFocus = (inputType) => {
+        setFocused(inputType);
+    }
+    const handleBlur = () => {
+        setFocused("");
+    }
+
+    const getFirstname = (e) => {
+        setFirstName(e.target.value);
+    }
+    const getSurname = (e) => {
+        setSurname(e.target.value);
+    }
+    const getGroup = (e) => {
+        setGroupId(e.target.value);
+    }
+    const getCallingCode = (e) => {
+        setCallingCode(e.target.value);
+    }
+    const getPhoneNumber = (e) => {
+        setPhoneNumber(e.target.value);
+    }
+
+    useEffect(() => {
+        dispatch(getAllActiveGroups());
+    }, []);
     
     return (
         <section className="register">
@@ -18,26 +59,55 @@ export default function RegisterScreen() {
                         <form onSubmit={() => alert("Hi")}>
                             <div className="register__form-item">
                                 <label htmlFor="surname">Фамилия</label>
-                                <input type="text" name="surname" />
+                                <input type="text" id="surname"
+                                onFocus={() => handleFocus("surname")} onBlur={handleBlur}
+                                style={{
+                                    borderColor: focused == "surname"
+                                    ? '#1778E9' : '#848181'
+                                }}
+                                required
+                                placeholder="Введите фамилию*" onChange={(e) => getSurname(e)}/>
                             </div>
                             <div className="register__form-item">
-                                <label htmlFor="name">Имя</label>
-                                <input type="text" name="name" />
+                                <label htmlFor="firstname">Имя</label>
+                                <input type="text" id="firstname" required
+                                onFocus={() => handleFocus("firstname")} onBlur={handleBlur}
+                                style={{
+                                    borderColor: focused == "firstname"
+                                    ? '#1778E9' : '#848181'
+                                }}
+                                placeholder="Введите имя*"  onChange={(e) => getFirstname(e)}/>
                             </div>
                             <div className="register__form-item">
-                                <label htmlFor="email">Почта</label>
-                                <input type="email" name="email" />
+                                <label htmlFor="callingCode">Номер телефона</label>
+                                <input type="text" id="callingCode" defaultValue="+996"
+                                onFocus={() => handleFocus("phoneNumber")} onBlur={handleBlur}
+                                style={{
+                                    borderColor: focused == "phoneNumber"
+                                    ? '#1778E9' : '#848181'
+                                }}
+                                required
+                                onChange={(e) => getCallingCode(e)}/>
+                                <input type="tel" id="phoneNumber"
+                                onFocus={() => handleFocus("phoneNumber")} onBlur={handleBlur}
+                                style={{
+                                    borderColor: focused == "phoneNumber"
+                                    ? '#1778E9' : '#848181'
+                                }}
+                                required
+                                placeholder="709 878 590" onChange={(e) => getPhoneNumber(e)}/>
                             </div>
                             <div className="register__form-item">
-                                <label htmlFor="phone-number">Номер телефона</label>
-                                <input type="tel" name="phone-number" />
-                            </div>
-                            <div className="register__form-item">
-                                <label htmlFor="category">Категория</label>
-                                <select name="category">
-                                    <option value="Neobis">Neobis</option>
-                                    <option value="Neolabs">Neolabs</option>
-                                    <option value="Breeze studio">Breeze studio</option>
+                                <label htmlFor="group">Группа</label>
+                                <select id="group" placeholder="Выберите группу*" required
+                                onFocus={() => handleFocus("group")} onBlur={handleBlur}
+                                style={{
+                                    borderColor: focused == "group"
+                                    ? '#1778E9' : '#848181'
+                                }}
+                                onChange={(e) => getGroup(e)}>
+                                    <option value="">Выберите группу *</option>
+                                    {activeGroups ? activeGroups.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                                 </select>
                             </div>
                             <div className="register__form-item">
