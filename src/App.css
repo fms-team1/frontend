@@ -586,6 +586,33 @@ td {
             user-select: none;
 }
 
+/* ANALYTICS SCREEN */
+.analytics {
+  width: 100%;
+}
+.analytics__content {
+  padding: 5% 5% 0 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.analytics__top-block {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.analytics__bottom-block {
+  margin-top: 3%;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.chart {
+  width: 50%;
+}
+
 /* USER SCREEN */
 .users__profile-exit {
   padding: 0% 2% 1% 2%;
@@ -830,6 +857,9 @@ td {
   .home__content {
     width: 75%;
   }
+  .home__content-top {
+    margin-top: 30px;
+  }
   .home__cash-amount {
     font-size: 16px;
     line-height: 19px;
@@ -915,6 +945,16 @@ td {
   }
   .user__personal-info {
     font-size: 15px;
+  }
+  .chart {
+    margin-top: 5%;
+    width: fit-content;
+  }
+  .analytics__content {
+    margin-top: 5%;
+  }
+  .chart:nth-child(2) {
+    margin-bottom: 3%;
   }
 }
 

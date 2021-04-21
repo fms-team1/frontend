@@ -29,7 +29,9 @@ export default function RenderTransaction(props) {
                                 <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} /> : ''
                             }</td>
                         <td>{amount + ' с'}</td>
-                        <td>{neoSection}</td>
+                        <td>{
+                            neoSection === "GLOBAL" ? '__________' : neoSection
+                        }</td>
                         <td>{categoryName}</td>
                         <td>{counterpartyName}</td>
                         <td>{accountantName}</td>

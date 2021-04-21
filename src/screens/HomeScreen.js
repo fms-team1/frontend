@@ -115,7 +115,7 @@ export default function HomeScreen(props) {
                                 <div className="home__filter-self">
                                     <div className="home__filter-icon"></div>
                                     <select className="home__filter-select" onChange={(e) => filterByTime(e)}>
-                                        <option value="choose">Выберите</option>
+                                        <option value="">Выберите</option>
                                         <option value="year">год</option>
                                         <option value="month">месяц</option>
                                         <option value="week">неделя</option>
