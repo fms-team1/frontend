@@ -83,7 +83,7 @@ export default function JournalScreen() {
     }
     dispatch(getFilterTypeList(userInfo));
     dispatch(getAllCategory(userInfo));
-  }, [])
+  }, []);
 
 
   return (

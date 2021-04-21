@@ -22,6 +22,11 @@
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
 }
+.dropdown__analytics-header {
+    height: 44px;
+    width: fit-content;
+    white-space: nowrap;
+}
 .dropdown__selected-header {
     display: flex;
     align-items: center;
@@ -45,7 +50,6 @@
 }
 .dropdown__filter-list img {
     margin-right: 7%;
-    width: 15%;
 }
 .dropdown__list-item {
     width: 100%;
@@ -92,6 +96,9 @@
     .dropdown__filter-item {
         width: 200px;
         margin: 1% 5%;
+    }
+    .dropdown__analytics-item {
+        width: fit-content !important;
     }
     .home__search {
         width: 200px;
@@ -171,5 +178,8 @@
     }
     .dropdown__selected-header {
         padding: 10px 10px 10px 15px;
+    }
+    .dropdown__analytics-header {
+        padding: 15px 15px 15px 20px;
     }
 }
