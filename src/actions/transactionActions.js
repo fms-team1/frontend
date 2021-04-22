@@ -87,56 +87,6 @@ export const addIncExpTransaction = (token, summa, wallet, category, comment, co
         dispatch({ type: ADD_TRANSACTION_FAIL, payload: error.message });
     }
 }
-export const addAccountant = (email, groupId, firstName, password, phoneNumber, surname) => async (dispatch, getState) => {
-    dispatch({
-        type: ADD_ACCOUNTANT_REQUEST
-    });
-    const {
-        userSignin: { userInfo }
-    } = getState();
-    try {
-        const { data } = await axios.post('https://neo-fms.herokuapp.com/registration/newAccountant',
-        {
-            email: email,
-            group_ids: [groupId], 
-            name: firstName,
-            password: password,
-            phoneNumber: phoneNumber,
-            surname: surname
-        },
-        {
-            headers: {
-                'Authorization': `Bearer ${userInfo.jwt}`
-            }
-        });
-        dispatch({ type: ADD_ACCOUNTANT_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({ type: ADD_ACCOUNTANT_FAIL, payload: error.message });
-    }
-}
-export const changePassword = (newPassword, oldPassword) => async (dispatch, getState) => {
-    dispatch({
-        type: CHANGE_PASSWORD_REQUEST
-    });
-    const {
-        userSignin: { userInfo }
-    } = getState();
-    try {
-        const { data } = await axios.put('https://neo-fms.herokuapp.com/user/changePassword',
-        {
-            newPassword: newPassword,
-            oldPassword: oldPassword
-        },
-        {
-            headers: {
-                'Authorization': `Bearer ${userInfo.jwt}`
-            }
-        });
-        dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({ type: CHANGE_PASSWORD_FAIL, payload: error.message });
-    }
-}
 export const listPeriodTransactions = (token, period) => async (dispatch) => {
     dispatch({
         type: TRANSACTION_PERIOD_LIST_REQUEST
@@ -349,15 +299,8 @@ export const getAllActiveGroups = () => async (dispatch, getState) => {
     dispatch({
         type: GROUP_LIST_REQUEST
     });
-    const {
-        userSignin: { userInfo }
-    } = getState();
     try {
-        const { data } = await axios.get('https://neo-fms.herokuapp.com/group/getAllActiveGroups', {
-            headers: {
-                'Authorization': `Bearer ${userInfo.jwt}`
-            }
-        });
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/group/getAllActiveGroups');
         dispatch({ type: GROUP_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: GROUP_LIST_FAIL, payload: error.message });

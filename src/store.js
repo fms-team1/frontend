@@ -1,13 +1,16 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
-import { getAllUsersReducer, getCurrentUserReducer, userSigninReducer } from "./reducers/userReducers";
+import { addAccountantReducer, changePasswordReducer, getAllUsersReducer, getCurrentUserReducer, newCounterpartyReducer, userSigninReducer } from "./reducers/userReducers";
 import thunk from "redux-thunk";
-import { addAccountantReducer, addNewTransactionReducer, changePasswordReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
+import { addNewTransactionReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
 
 const initialState = {
     userSignin: {
         userInfo: localStorage.getItem('userToken')
             ? JSON.parse(localStorage.getItem('userToken'))
-            : null
+            : null,
+        userRememberMe: localStorage.getItem('userRememberMe')
+        ? JSON.parse(localStorage.getItem('userRememberMe'))
+        : null
     }
 };
 
@@ -20,6 +23,7 @@ const reducer = combineReducers({
     filterList: getFilterListReducer,
     addTransaction: addNewTransactionReducer,
     addAccountant: addAccountantReducer,
+    registerCounterparty: newCounterpartyReducer,
     transactionTypesList: getTransactionReducer,
     changePasswordResult: changePasswordReducer,
     currentUser: getCurrentUserReducer,

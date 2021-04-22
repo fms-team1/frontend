@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePassword } from '../actions/transactionActions';
 import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
-import { ADD_ACCOUNTANT_RESET } from '../constants/transactionConstants';
+import { changePassword } from '../actions/userActions';
+import { ADD_ACCOUNTANT_RESET } from '../constants/userConstants';
 
 export default function ChangePassword(props) {
 
