@@ -117,7 +117,7 @@ export default function JournalScreen() {
             </svg>
           </NavLink>
         </nav>
-        <div className="journal__filter">
+        <div className="journal__filter noselect">
           <Dropdown state={operation} setState={setOperation} title="Операция" items={filterTypeList ? filterTypeList[1].data : null} dropdownType="operations" />
           <Dropdown state={category} setState={setCategory}  title="Категория" items={categories ? categories : []} dropdownType="categories" />
           <DropdownByPeriod start={startPeriod} end={endPeriod} setStart={setStartPeriod} setEnd={setEndPeriod}  title="Период" />

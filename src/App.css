@@ -89,6 +89,15 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
   align-items: center;
 }
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
 input[type=submit] {
   margin-top: 5%;
   background-color: #3379CA;
@@ -117,6 +126,7 @@ input[type=submit] {
 /* Register Screen */
 .register__form {
   width: 40%;
+  height: fit-content;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -132,8 +142,11 @@ input[type=submit] {
   margin: 30px auto;
 }
 .register__form-item {
-  width: 300px;
+  width: 100%;
   position: relative;
+}
+.register__form-item:first-child {
+  margin-top: 5%;
 }
 .register__form input,
 .register__form select {
@@ -172,11 +185,11 @@ input[type=submit] {
   border: 1px solid #1778E9;
 }
 .register__form-item:nth-child(3) input:nth-child(2) {
-  width: 22%;
+  width: 26%;
   margin-right: 5%;
 }
 .register__form-item:nth-child(3) input:nth-child(3) {
-  width: 73%;
+  width: 69%;
 }
 .register__form-item label {
   display: block;
@@ -228,16 +241,13 @@ input[type=submit] {
 }
 /* Custom checkbox */
 .remember-me__label {
+  width: fit-content;
   display: block;
   position: relative;
   padding-left: 25px;
   cursor: pointer;
   font-size: 18px;
   line-height: 20px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .remember-me__label input {
   position: absolute;
@@ -285,6 +295,8 @@ input[type=submit] {
   margin: 20px auto;
 }
 .signin__forgot-pwd {
+  display: flex;
+  justify-content: flex-end;
   margin-top: 28px;
   text-align: center;
 }
@@ -333,12 +345,24 @@ input[type=submit] {
 
 /* Alert */
 .loader-container {
-  width: 80%;
+  /* width: 80%;
   margin: 1% auto;
-  text-align: center;
+  text-align: center; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f8f8AD;
+  z-index: 1000;
+}
+.loading {
+  position: absolute;
+  left: 48.3%;
+  top: 45%;
 }
 .loading i {
-  font-size: 30px;
+  font-size: 40px;
   color: #1778E9;
 }
 .alert {
@@ -578,12 +602,6 @@ td {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
 }
 
 /* ANALYTICS SCREEN */
@@ -830,6 +848,10 @@ td {
     padding: 15% 0;
     height: fit-content;
     width: 80%;
+  }
+  .register__form {
+    width: 80%;
+    padding: 15% 0;
   }
   .loading {
     left: 46%;

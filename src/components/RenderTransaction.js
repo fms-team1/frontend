@@ -15,17 +15,17 @@ export default function RenderTransaction(props) {
             </thead>
             <tbody className="transaction__tbody">
                 {props.transactions ? props.transactions.map(
-                ({ id, transactionType, amount, neoSection,
+                ({ id, transactionTypeId, amount, neoSection,
                     categoryName, counterpartyName, accountantName,
-                    walletName, createdDate}) => {
+                    walletId, createdDate}) => {
                 return (
                     <tr key={id}>
                         <td>{
-                            transactionType === 'INCOME' ?
+                            transactionTypeId === 0 ?
                                 <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} /> :
-                            transactionType === 'EXPENSE' ?
+                            transactionTypeId === 1 ?
                                 <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> :
-                            transactionType === 'MONEY_TRANSFER' ?
+                            transactionTypeId === 2 ?
                                 <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} /> : ''
                             }</td>
                         <td>{amount + ' с'}</td>
@@ -33,13 +33,14 @@ export default function RenderTransaction(props) {
                             neoSection === "GLOBAL" ? '__________' : neoSection
                         }</td>
                         <td>{categoryName}</td>
-                        <td>{counterpartyName}</td>
+                        <td>{counterpartyName ? counterpartyName : '__________'}</td>
                         <td>{accountantName}</td>
                         <td>{
-                            walletName === 'Наличные' ? <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} /> :
-                            walletName === 'О! Деньги' ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
-                            walletName === 'Элсом' ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
-                            walletName === 'Demir Bank' ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> : ''
+                            walletId === 1 ? <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} /> :
+                            walletId === 5 ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
+                            walletId === 3 ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
+                            walletId === 2 ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
+                            <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
                             }
                         </td>
                         <td>{createdDate.slice(0, 10)}</td>

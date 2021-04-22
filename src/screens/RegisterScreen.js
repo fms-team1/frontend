@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllActiveGroups } from '../actions/transactionActions';
+import { newCounterparty } from '../actions/userActions';
+import MessageBox from '../components/MessageBox';
+import LoadingBox from '../components/LoadingBox';
+import { NEW_COUNTERPARTY_RESET } from '../constants/userConstants';
+import { NavLink } from 'react-router-dom';
 
-export default function RegisterScreen() {
+export default function RegisterScreen(props) {
 
     const dispatch = useDispatch();
 
     const activeGroupsList = useSelector((state) => state.activeGroupList);
     const { activeGroups } = activeGroupsList;
+    const getnNewCounterparty = useSelector((state) => state.registerCounterparty);
+    const { loadingAdd, errorAdd, messageAdd } = getnNewCounterparty;
 
     const [focused, setFocused] = useState("");
 
@@ -23,6 +30,11 @@ export default function RegisterScreen() {
     const handleBlur = () => {
         setFocused("");
     }
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        dispatch(newCounterparty(firstName, surname, groupId, callingCode + ' ' + phoneNumber))
+    };
 
     const getFirstname = (e) => {
         setFirstName(e.target.value);
@@ -41,6 +53,15 @@ export default function RegisterScreen() {
     }
 
     useEffect(() => {
+        if (messageAdd) {
+            setTimeout(() => {
+                dispatch({ type: NEW_COUNTERPARTY_RESET });
+                props.history.push('/signin');
+            }, 10000);   
+        }
+      }, [messageAdd]);
+
+    useEffect(() => {
         dispatch(getAllActiveGroups());
     }, []);
     
@@ -56,7 +77,10 @@ export default function RegisterScreen() {
                             <img src={`${process.env.PUBLIC_URL}/logo.svg`} alt="icon"/>
                             <div className="signin__icon-title">NeoFin</div>
                         </div>
-                        <form onSubmit={() => alert("Hi")}>
+                        {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
+                        <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
+                        <MessageBox variant="success">{messageAdd}</MessageBox> : ''}
+                        <form onSubmit={submitHandler}>
                             <div className="register__form-item">
                                 <label htmlFor="surname">Фамилия</label>
                                 <input type="text" id="surname"
@@ -99,7 +123,7 @@ export default function RegisterScreen() {
                             </div>
                             <div className="register__form-item">
                                 <label htmlFor="group">Группа</label>
-                                <select id="group" placeholder="Выберите группу*" required
+                                <select id="group" required
                                 onFocus={() => handleFocus("group")} onBlur={handleBlur}
                                 style={{
                                     borderColor: focused == "group"
@@ -112,6 +136,10 @@ export default function RegisterScreen() {
                             </div>
                             <div className="register__form-item">
                                 <input type="submit" value="Зарегистрироваться" />
+                            </div>
+                            <div className="signin__forgot-pwd">
+                                <img src={`${process.env.PUBLIC_URL}/icons/logOut.svg`} className="users__exit-icon" />
+                                <NavLink to="/signin">Назад</NavLink>
                             </div>
                         </form>
                     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnalytics, getTransactionTypes } from '../actions/transactionActions';
+import { signout } from '../actions/userActions';
 import Chart from '../components/Chart';
 import DropdownAnalytics from '../components/DropdownAnalytics';
 import DropdownByPeriodAnalytics from '../components/DropdownByPeriodAnalytics';
@@ -33,16 +34,16 @@ export default function AnalyticsScreen() {
   }
 
   useEffect(() => {
-    // if(errorFilter && errorFilter.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(error && error.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
     dispatch(getAnalytics(operation.id, startPeriod, endPeriod));
   }, [operation, startPeriod, endPeriod]);
 
   useEffect(() => {
-    // if(errorFilter && errorFilter.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorTransactionTypes && errorTransactionTypes.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
     dispatch(getTransactionTypes());
   }, []);
 
@@ -55,8 +56,7 @@ export default function AnalyticsScreen() {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <div className="analytics__content">
-            <div className="analytics__top-block">
-              <div className="analytics__dropdown">
+            <div className="analytics__top-block noselect">
                 <DropdownByPeriodAnalytics
                   start={startPeriod}
                   end={endPeriod}
@@ -64,15 +64,12 @@ export default function AnalyticsScreen() {
                   setEnd={setEndPeriod}
                   selectedId={selectedPeriodId}
                   selectedIdSet={selectedPeriodIdSet} />
-              </div>
-              <div className="analytics__dropdown">
                 <DropdownAnalytics
                   items={transactionTypes}
                   state={operation}
                   setState={setOperation}
                   selectedId={selectedOperationId}
                   selectedIdSet={selectedOperationIdSet} />
-              </div>
             </div>
             <div className="analytics__bottom-block">
               <Chart

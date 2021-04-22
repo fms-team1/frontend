@@ -16,7 +16,6 @@ export default function UsersScreen() {
 
   const signoutHandler = () => {  
     dispatch(signout());
-    // setLogOutButton(false);
 };
 
   useEffect(() => {
