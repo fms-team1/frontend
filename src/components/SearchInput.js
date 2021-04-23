@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Dropdown.css';
 
-export default function Dropdown({ state, setState, title, items }) {
+export default function SearchInput({ state, setState, title, items }) {
   const [open, setOpen] = useState(false);
   const [selected, selectedSet] = useState(null);
   const [search, setSearch] = useState("");
@@ -66,7 +66,7 @@ export default function Dropdown({ state, setState, title, items }) {
         }
         {open && (
           <div className="dropdown__filter-list dropdown__search-list">
-            { filteredItems.map(item => (
+            { filteredItems && filteredItems.map(item => (
             <button className="dropdown__list-item" key={item.id} type="button" onClick={() => handleOnClick(item)}>
               <div>{item.name}</div>
               {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}

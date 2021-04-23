@@ -41,20 +41,22 @@ export default function ChoosePeriod({show, handleClose, setStart, setEnd, selec
                 <div className="modal__form-item">
                   <label htmlFor="startDate">Дата начало</label>
                   <input type="date" id="startDate"
-                   onFocus={() => handleFocus("startDate")} onBlur={handleBlur}
-                   style={{
-                     borderColor: focused == "startDate"
-                     ? '#1778E9' : '#848181'
-                   }} onChange={(e) => getStartDate(e)} />
+                    required
+                    onFocus={() => handleFocus("startDate")} onBlur={handleBlur}
+                    style={{
+                      borderColor: focused == "startDate"
+                      ? '#1778E9' : '#848181'
+                    }} onChange={(e) => getStartDate(e)} />
                 </div>
                 <div className="modal__form-item">
                   <label htmlFor="endDate">Дата конец</label>
                   <input type="date" id="endDate"
-                   onFocus={() => handleFocus("endDate")} onBlur={handleBlur}
-                   style={{
-                     borderColor: focused == "endDate"
-                     ? '#1778E9' : '#848181'
-                   }} onChange={(e) => getEndDate(e)} />
+                    required
+                    onFocus={() => handleFocus("endDate")} onBlur={handleBlur}
+                    style={{
+                      borderColor: focused == "endDate"
+                      ? '#1778E9' : '#848181'
+                    }} onChange={(e) => getEndDate(e)} />
                 </div>
                 <div className="modal__form-item">
                   <input type="submit" value="Выберите" />

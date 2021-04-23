@@ -75,13 +75,13 @@ export default function JournalScreen() {
       dispatch(signout());
     }
     dispatch(getJournalList(neoSectionId, operation, category, startPeriod, endPeriod, wallet, counterparty, users));
-}, [neoSectionId, operation, category, endPeriod, wallet, counterparty, users]);
+  }, [neoSectionId, operation, category, endPeriod, wallet, counterparty, users]);
 
   useEffect(() => {
     if(errorFilter && errorFilter.indexOf("403") !== -1) {
       dispatch(signout());
     }
-    dispatch(getFilterTypeList(userInfo));
+    dispatch(getFilterTypeList());
     dispatch(getAllCategory(userInfo));
   }, []);
 

@@ -75,7 +75,8 @@ export default function SigninScreen(props) {
                         <div className="custom-form__item">
                             <label htmlFor="email">Почта</label>
                             <input
-                                type="email"
+                                // type="email"
+                                type="text"
                                 id="email"
                                 required
                                 onFocus={() => handleFocus("email")}

@@ -10,12 +10,18 @@ import AddIncExpTransaction from '../components/AddIncExpTransaction';
 import AddTransTransaction from '../components/AddTransTransaction';
 import { signout } from '../actions/userActions';
 import { Link } from 'react-router-dom';
+import DropdownByPeriodAnalytics from '../components/DropdownByPeriodAnalytics';
 
 export default function HomeScreen(props) {
     const dispatch = useDispatch();
+
+    const [selectedPeriod, selectedPeriodSet] = useState({id: 0, name: 'Неделя'});
     const [showIncExp, setShowIncExp] = useState(false);
     const [showTrans, setShowTrans] = useState(false);
-    const [customActive, setCustomActive] = useState(null);
+    const [startPeriod, setStartPeriod] = useState(getWeekDate());
+    const [endPeriod, setEndPeriod] = useState(converStringDate(new Date()));
+
+
     const userSignin = useSelector((state) => state.userSignin);
     const { userInfo } = userSignin;
 
@@ -35,30 +41,17 @@ export default function HomeScreen(props) {
       setShowTrans(false);
     };
 
-    const converStringDate = (date) => {
+    function getWeekDate() {
+        let weekDate = new Date();
+        let pastDate = weekDate.getDate() - 7;
+        weekDate.setDate(pastDate);
+        return converStringDate(weekDate);
+    }
+
+    function converStringDate(date) {
         return date.getFullYear()+'-'+(+date.getMonth()+1)+'-'+date.getDate()
     }
 
-    const filterByTime = (e) => {
-        let ourDate = new Date();
-
-        if(e.target.value === 'week' || e.target.innerText === 'Неделя') {
-            let weekDate = new Date(ourDate);
-            let pastDate = weekDate.getDate() - 7;
-            weekDate.setDate(pastDate);
-            dispatch(listPeriodTransactions(userInfo, converStringDate(weekDate) + ' ' + converStringDate(ourDate)));
-        } else if (e.target.value === 'month' || e.target.innerText === 'Месяц') {
-            let date = new Date(ourDate);
-            let month = date.getMonth()-1;
-            let formatPrevMonth = new Date(date.setMonth(month));
-            dispatch(listPeriodTransactions(userInfo, converStringDate(formatPrevMonth) + ' ' + converStringDate(ourDate)));
-        } else if (e.target.value === 'year' || e.target.innerText === 'Год') {
-            let date = new Date(ourDate);
-            let year = date.getFullYear()-1;
-            let formatPrevYear = new Date(date.setFullYear(year));
-            dispatch(listPeriodTransactions(userInfo, converStringDate(formatPrevYear) + ' ' + converStringDate(ourDate)));
-        }
-    }
     const [media, setMedia] = useState(false);
 
     useEffect(() => {
@@ -77,6 +70,11 @@ export default function HomeScreen(props) {
         });
 
     }, [window.matchMedia("(max-width: 620px)").matches]);
+
+    useEffect(() => {
+        dispatch(listPeriodTransactions(startPeriod + ' ' + endPeriod));
+      }, [startPeriod, endPeriod]);
+
     useEffect(() => {
         if(error && error.indexOf("403") !== -1) {
             dispatch(signout());
@@ -98,7 +96,15 @@ export default function HomeScreen(props) {
                 ) : (
                     <>
                     <div className="home__content">
-                        <div className="home__content-top column__space-between">
+                        <div className="home__content-block">
+                            <h1 className="home__content-title">Баланс</h1>
+                            <div className="home__filter">
+                                <DropdownByPeriodAnalytics
+                                    setStart={setStartPeriod}
+                                    setEnd={setEndPeriod}
+                                    selected={selectedPeriod}
+                                    selectedSet={selectedPeriodSet} />
+                            </div>
                             <div className="home__cash-block">
                                 <div className="home__cash-type">Доходы</div>
                                 <div className="home__cash-amount">
@@ -111,39 +117,8 @@ export default function HomeScreen(props) {
                                     {incomesAndExpenses ? ('- ' + incomesAndExpenses.expense + ' с') : ''}
                                 </div>
                             </div>
-                            <div className="home__filter">
-                                <div className="home__filter-self">
-                                    <div className="home__filter-icon"></div>
-                                    <select className="home__filter-select" onChange={(e) => filterByTime(e)}>
-                                        <option value="">Выберите</option>
-                                        <option value="year">год</option>
-                                        <option value="month">месяц</option>
-                                        <option value="week">неделя</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
-                        <div className="home__filter-adaptive">
-                            <div onClick={(e) => {
-                              setCustomActive(3)
-                              filterByTime(e)}}
-                              className={`customNavLink ${customActive === 3 ? 'customNavLink--active' : ''}` }>
-                              Год
-                            </div>
-                            <div onClick={(e) => {
-                              setCustomActive(2)
-                              filterByTime(e)}} 
-                              className={`customNavLink ${customActive === 2 ? 'customNavLink--active' : ''}` }>
-                              Месяц
-                            </div>
-                            <div onClick={(e) => {
-                              setCustomActive(1)
-                              filterByTime(e)}} 
-                              className={`customNavLink ${customActive === 1 ? 'customNavLink--active' : ''}` }>
-                              Неделя
-                             </div>
-                           </div>
-                        <div className="home__content-body">
+                        <div className="home__content-block">
                             <table>
                                 <thead>
                                     <tr>{
@@ -157,25 +132,27 @@ export default function HomeScreen(props) {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="home__content-buttons column__space-between">
-                            <Link to='/addTransaction' className="home__button-income">
-                                <img src={`${process.env.PUBLIC_URL}/icons/income_24.svg`} />
-                                <div>Доход</div>
-                            </Link>
-                            <Link to='/addTransaction' className="home__button-expense">
-                                <img src={`${process.env.PUBLIC_URL}/icons/expense_24.svg`} /> 
-                                <div>Расход</div>
-                            </Link>
-                            <Link to='/addTransferTransaction' className="home__button-transfer">
-                                <img src={`${process.env.PUBLIC_URL}/icons/transfer_24.svg`} />
-                                <div>Перевод</div>
-                            </Link>
-                        </div>
                     </div>
                     <div className="transaction__block">
+                        <div className="transaction__top-block">
+                            <div className="transaction__title-block">Последние транзакции</div>
+                            <div className="home__content-buttons column__space-between">
+                                <Link to='/addTransaction' className="home__button-income">
+                                    <img src={`${process.env.PUBLIC_URL}/icons/income_home.svg`} />
+                                    <div>Доход</div>
+                                </Link>
+                                <Link to='/addTransaction' className="home__button-expense">
+                                    <img src={`${process.env.PUBLIC_URL}/icons/expense_home.svg`} /> 
+                                    <div>Расход</div>
+                                </Link>
+                                <Link to='/addTransferTransaction' className="home__button-transfer">
+                                    <img src={`${process.env.PUBLIC_URL}/icons/transfer_home.svg`} />
+                                    <div>Перевод</div>
+                                </Link>
+                            </div>
+                        </div>
                         {media ? 
                         (<>
-                            <div className="transaction__title-block">Последние транзакции</div>
                             <RenderAdaptiveTransaction  transactions={transactions} />
                         </>) : <RenderTransaction transactions={transactions} />}
                     </div>    

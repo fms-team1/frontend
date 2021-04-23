@@ -18,7 +18,10 @@ import {
     NEW_COUNTERPARTY_FAIL,
     CHANGE_PASSWORD_REQUEST,
     CHANGE_PASSWORD_SUCCESS,
-    CHANGE_PASSWORD_FAIL
+    CHANGE_PASSWORD_FAIL,
+    GET_COUNTERPARTIES_REQUEST,
+    GET_COUNTERPARTIES_SUCCESS,
+    GET_COUNTERPARTIES_FAIL
  } from "../constants/userConstants"
 
 export const signin = (email, password, rememberMe) => async (dispatch) => {
@@ -52,19 +55,40 @@ export const signout = () => (dispatch) => {
     dispatch({ type: USER_SIGNOUT, payload: JSON.parse(localStorage.getItem('userRememberMe')) });
 }
 
-export const getCurrentUser = (token) => async (dispatch) => {
+export const getCurrentUser = () => async (dispatch, getState) => {
     dispatch({
         type: GET_CURRENT_USER_REQUEST
     });
+    const {
+        userSignin: { userInfo }
+    } = getState();
     try {
         const { data } = await axios.get('https://neo-fms.herokuapp.com/user/getCurrentUser', {
             headers: {
-                'Authorization': `Bearer ${token.jwt}`
+                'Authorization': `Bearer ${userInfo.jwt}`
             }
         });
         dispatch({ type: GET_CURRENT_USER_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: GET_CURRENT_USER_FAIL, payload: error.message });
+    }
+}
+export const getAllCounterparties = () => async (dispatch, getState) => {
+    dispatch({
+        type: GET_COUNTERPARTIES_REQUEST
+    });
+    const {
+        userSignin: { userInfo },
+    } = getState();
+    try {
+        const data = await axios.get('https://neo-fms.herokuapp.com/people/getAllCounterparties', {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: GET_COUNTERPARTIES_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: GET_COUNTERPARTIES_FAIL, payload: error.message });
     }
 }
 export const addAccountant = (email, groupId, firstName, password, phoneNumber, surname) => async (dispatch, getState) => {
