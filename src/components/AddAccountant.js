@@ -163,7 +163,7 @@ export default function AddAccountant(props) {
                 </div>
                   {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
                   <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
-                  <MessageBox variant="success">{messageAdd}</MessageBox> : ''}
+                  <MessageBox variant="success">Успешно добавлен</MessageBox> : ''}
             </form>
           </section>
         </div>

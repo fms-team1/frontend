@@ -19,7 +19,7 @@ export default function UsersScreen() {
 };
 
   useEffect(() => {
-    dispatch(getCurrentUser(userInfo));
+    dispatch(getCurrentUser());
     dispatch(getAllUsers(userInfo));
   }, []);
 

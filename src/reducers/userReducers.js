@@ -1,4 +1,4 @@
-import { ADD_ACCOUNTANT_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_RESET, ADD_ACCOUNTANT_SUCCESS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_RESET, CHANGE_PASSWORD_SUCCESS, GET_ALL_USERS_FAIL, GET_ALL_USERS_REQUEST, GET_ALL_USERS_SUCCESS, GET_CURRENT_USER_FAIL, GET_CURRENT_USER_REQUEST, GET_CURRENT_USER_SUCCESS, NEW_COUNTERPARTY_FAIL, NEW_COUNTERPARTY_REQUEST, NEW_COUNTERPARTY_RESET, NEW_COUNTERPARTY_SUCCESS, USER_SIGNOUT, USER_SIGN_FAIL, USER_SIGN_REQUEST, USER_SIGN_SUCCESS } from "../constants/userConstants";
+import { ADD_ACCOUNTANT_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_RESET, ADD_ACCOUNTANT_SUCCESS, CHANGE_PASSWORD_FAIL, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_RESET, CHANGE_PASSWORD_SUCCESS, GET_ALL_USERS_FAIL, GET_ALL_USERS_REQUEST, GET_ALL_USERS_SUCCESS, GET_COUNTERPARTIES_FAIL, GET_COUNTERPARTIES_REQUEST, GET_COUNTERPARTIES_SUCCESS, GET_CURRENT_USER_FAIL, GET_CURRENT_USER_REQUEST, GET_CURRENT_USER_SUCCESS, NEW_COUNTERPARTY_FAIL, NEW_COUNTERPARTY_REQUEST, NEW_COUNTERPARTY_RESET, NEW_COUNTERPARTY_SUCCESS, USER_SIGNOUT, USER_SIGN_FAIL, USER_SIGN_REQUEST, USER_SIGN_SUCCESS } from "../constants/userConstants";
 
 export const userSigninReducer = (state = {}, action) => {
     switch(action.type) {
@@ -93,6 +93,21 @@ export const getAllUsersReducer = (state = {}, action) => {
              };
         case GET_ALL_USERS_FAIL:
             return { loadingAllUsers: false, errorAllUsers: action.payload };
+        default:
+            return state;
+    }
+};
+export const getAllCounterpartiesReducer = (state = {}, action) => {
+    switch(action.type) {
+        case GET_COUNTERPARTIES_REQUEST:
+            return { loadingAllCounterparties: true };
+        case GET_COUNTERPARTIES_SUCCESS:
+            return {
+                loadingAllCounterparties: false,
+                allCounterpartiesList: action.payload.data
+             };
+        case GET_COUNTERPARTIES_FAIL:
+            return { loadingAllCounterparties: false, errorAllCounterparties: action.payload };
         default:
             return state;
     }

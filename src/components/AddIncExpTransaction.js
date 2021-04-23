@@ -5,6 +5,8 @@ import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
 import { ADD_TRANSACTION_RESET } from '../constants/transactionConstants';
+import SearchInput from './SearchInput';
+import { getAllCounterparties } from '../actions/userActions';
 
 export default function AddIncExpTransaction(props) {
 
@@ -16,6 +18,9 @@ export default function AddIncExpTransaction(props) {
   const { sections } = sectionList;
   const walletList = useSelector((state) => state.walletList);
   const { wallets } = walletList;
+  const allCounterparties = useSelector((state) => state.allCounterparties);
+  const { allCounterpartiesList } = allCounterparties;
+
   const addTransaction = useSelector((state) => state.addTransaction);
   const { loadingAdd, errorAdd, messageAdd } = addTransaction;
 
@@ -25,6 +30,7 @@ export default function AddIncExpTransaction(props) {
   const [category, setCategory] = useState(0);
   const [counterparty, setCounterparty] = useState('_____');
   const [comment, setComment] = useState('_____');
+  
   const [focused, setFocused] = useState("");
 
   const dispatch = useDispatch();
@@ -70,6 +76,7 @@ export default function AddIncExpTransaction(props) {
     dispatch(getNeoSections(userInfo));
     dispatch(getAllWallet(userInfo));
     dispatch(getAllCategory(userInfo));
+    dispatch(getAllCounterparties());
   }, []);
 
     return (
@@ -89,7 +96,7 @@ export default function AddIncExpTransaction(props) {
                   required
                   onChange={(e) => getOrganization(e)}>
                     <option value="">Выберите организацию</option>
-                    {sections ? sections.map(({id, name}) => <option key={id} value={id}>{name}</option>) : null}
+                    {sections ? sections.map(({id, name}) => id !== 2 && <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
                 <div className="modal__form-item">
@@ -140,14 +147,16 @@ export default function AddIncExpTransaction(props) {
                   </select>
                 </div>
                 <div className="modal__form-item">
-                  <label htmlFor="contragent">Контрагент</label>
+                  {console.log(allCounterpartiesList)}
+                  <SearchInput state={counterparty} setState={setCounterparty} title="Введите контрагент" items={allCounterpartiesList} />
+                  {/* <label htmlFor="contragent">Контрагент</label>
                   <input type="text" id="contragent"
                   onFocus={() => handleFocus("counterPart")} onBlur={handleBlur}
                   style={{
                     borderColor: focused == "counterPart"
                     ? '#1778E9' : '#848181'
                   }}
-                  placeholder="Введите контрагент"  onChange={(e) => getCounterparty(e)}/>
+                  placeholder="Введите контрагент"  onChange={(e) => getCounterparty(e)}/> */}
                 </div>
               </div>
               <div className="modal__bottom-form">
@@ -166,7 +175,7 @@ export default function AddIncExpTransaction(props) {
                 </div>
                 {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
                 <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
-                <MessageBox variant="success">{messageAdd}</MessageBox> : ''}
+                <MessageBox variant="success">Успешно добавлен</MessageBox> : ''}
               </div>
             </form>
           </section>

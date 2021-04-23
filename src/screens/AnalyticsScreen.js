@@ -11,8 +11,8 @@ import MessageBox from '../components/MessageBox';
 export default function AnalyticsScreen() {
   const dispatch = useDispatch();
 
-  const [selectedPeriodId, selectedPeriodIdSet] = useState(1);
-  const [selectedOperationId, selectedOperationIdSet] = useState({id: 0, name: "Доход"});
+  const [selectedPeriod, selectedPeriodSet] = useState({id: 0, name: 'Неделя'});
+  const [selectedOperation, selectedOperationSet] = useState({id: 0, name: "Доход"});
   const [operation, setOperation] = useState({id: 0, name: "Доход"});
   const [startPeriod, setStartPeriod] = useState(getWeekDate());
   const [endPeriod, setEndPeriod] = useState(converStringDate(new Date()));
@@ -58,18 +58,15 @@ export default function AnalyticsScreen() {
           <div className="analytics__content">
             <div className="analytics__top-block noselect">
                 <DropdownByPeriodAnalytics
-                  start={startPeriod}
-                  end={endPeriod}
                   setStart={setStartPeriod}
                   setEnd={setEndPeriod}
-                  selectedId={selectedPeriodId}
-                  selectedIdSet={selectedPeriodIdSet} />
+                  selected={selectedPeriod}
+                  selectedSet={selectedPeriodSet} />
                 <DropdownAnalytics
                   items={transactionTypes}
-                  state={operation}
                   setState={setOperation}
-                  selectedId={selectedOperationId}
-                  selectedIdSet={selectedOperationIdSet} />
+                  selected={selectedOperation}
+                  selectedSet={selectedOperationSet} />
             </div>
             <div className="analytics__bottom-block">
               <Chart
