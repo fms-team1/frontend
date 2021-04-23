@@ -37,9 +37,9 @@ export default function RenderTransaction(props) {
                         <td>{accountantName}</td>
                         <td>{
                             walletId === 1 ? <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} /> :
-                            walletId === 5 ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
-                            walletId === 3 ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
-                            walletId === 2 ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
+                            walletId === 2 ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
+                            walletId === 4 ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
+                            walletId === 3 ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
                             <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
                             }
                         </td>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Dropdown.css';
 
-export default function SearchInput({ state, setState, title, items }) {
+export default function SearchGetCounterparty({ state, setState, label, title, items }) {
   const [open, setOpen] = useState(false);
   const [selected, selectedSet] = useState(null);
   const [search, setSearch] = useState("");
@@ -9,7 +9,7 @@ export default function SearchInput({ state, setState, title, items }) {
   const wrapperRef = useRef(null);
 
   function handleOnClick(item) {
-    setState(item.id);
+    setState(item.name);
     selectedSet(item.name);
     setSearch('');
     setOpen(false);
@@ -19,6 +19,7 @@ export default function SearchInput({ state, setState, title, items }) {
     selectedSet(null);
   }
   function onHandleChangeInput(e) {
+    setState(e.target.value);
     setSearch(e.target.value);
   }
 
@@ -38,34 +39,33 @@ export default function SearchInput({ state, setState, title, items }) {
     return () => {
         document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [search, items, wrapperRef]);
+  }, [search, wrapperRef]);
 
   return (
     <div ref={wrapperRef} className="dropdown__filter-item">
       { selected && state !== null ?
-        <div
-          className="dropdown__selected-header"
-        >
-          <div className="dropdown__selected-title">{selected}</div>
-          <img
+        <>
+          <label>{label}</label>
+          <div className="dropdown__selected-header dropdown__add-header">
+            <span className="dropdown__selected-title">{selected}</span>
+            <img
             src={`${process.env.PUBLIC_URL}/icons/dropdown-cancel.svg`}
             onKeyPress={() => handleOnCancel()}
             onClick={() => handleOnCancel()}
             className="dropdown__cancel-icon" />
-        </div> :
-        <div
-          className="home__search-bar"
-        >
+          </div>
+        </> :
+        <>
+          <label>{label}</label>
           <input
             type="text"
             placeholder={title}
-            className="home__search"
             onFocus={() => setOpen(true)}
             onChange={onHandleChangeInput} />
-        </div>
+        </>
         }
         {open && (
-          <div className="dropdown__filter-list">
+          <div className="dropdown__filter-list dropdown__add-list">
             { filteredItems && filteredItems.map(item => (
             <button className="dropdown__list-item" key={item.id} type="button" onClick={() => handleOnClick(item)}>
               <div>{item.name}</div>

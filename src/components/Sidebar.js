@@ -88,7 +88,7 @@ export default function Sidebar({state, setState}) {
                     <NavLink
                         activeClassName="navbar__link--active"
                         className="navbar__link"
-                        to="/users"
+                        to="/debts"
                         >
                         <div className="navbar__link-icon">
                             <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

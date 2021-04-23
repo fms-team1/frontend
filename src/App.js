@@ -14,6 +14,8 @@ import AddIncExpTransaction from './components/AddIncExpTransaction';
 import AddTransTransaction from './components/AddTransTransaction';
 import ChangePassword from './components/ChangePassword';
 import BurgerMenu from './components/BurgerMenu';
+import AddDebt from './components/AddDebt';
+import DebtsScreen from './screens/DebtsScreen';
 
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
@@ -34,9 +36,11 @@ function App() {
         <Route path="/register" component={RegisterScreen}></Route>
         <Route path={["/journal", "/journal/neobis", "/journal/neolabs"]} component={JournalScreen}></Route>
         <Route path="/analytics" component={AnalyticsScreen}></Route>
+        <Route path="/debts" component={DebtsScreen}></Route>
         <Route path="/users" component={UsersScreen}></Route>
         <Route path="/addAccountant" component={AddAccountant}></Route>
         <Route path="/addTransaction" component={AddIncExpTransaction}></Route>
+        <Route path="/addDebt" component={AddDebt}></Route>
         <Route path="/addTransferTransaction" component={AddTransTransaction}></Route>
         <Route path="/changePassword" component={ChangePassword}></Route>
 

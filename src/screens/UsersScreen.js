@@ -41,7 +41,8 @@ export default function UsersScreen() {
                 <div className="users__list">
                   {allUsersData.map(user => (
                     <div key={user.id} className="users__list-item">
-                      {user.name} {user.surname} ({user.groups[0].name})
+                      {user.name} {user.surname}
+                      ({user.groups[0].name})
                     </div>
                   ))}
                 </div>

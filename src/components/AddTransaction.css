@@ -14,8 +14,8 @@
             user-select: none;
 }
 #date::-webkit-calendar-picker-indicator {
-  width: 22px;
-  height: 20px;
+  width: 18px;
+  height: 17px;
   border-width: thin;
   background: url(../icons/calendar_two.svg) no-repeat;
   cursor: pointer;
@@ -62,7 +62,6 @@
   border-radius: 5px;
   padding: 17px 18px;
   font-size: 16px;
-  line-height: 20px;
   color: #4C4C4C;
 }
 .modal__main-form select {
@@ -120,7 +119,7 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 .accountant__form-item {
@@ -133,12 +132,12 @@
   margin: 10px 0 13px 0;
   border: 1px solid #848181;
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 13px 15px;
   font-size: 14px;
   color: #4C4C4C;
 }
 .accountant__main-form select {
-  padding: 11px 30px 11px 18px;
+  padding: 14px 30px 14px 18px;
   font-size: 14px;
   color: #4C4C4C;
   -moz-appearance: none;
@@ -163,12 +162,27 @@
   background: #1778E9;
   border: 1px solid #1778E9;
 }
+.debts__form-item textarea {
+  width: 100%;
+  margin: 10px 0 13px 0;
+  display: block;
+  border: 1px solid #979797;
+  padding: 3%;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #4C4C4C;
+}
 .accountant__form-item:nth-child(3) input:nth-child(2) {
   width: 22%;
   margin-right: 5%;
 }
 .accountant__form-item:nth-child(3) input:nth-child(3) {
   width: 73%;
+}
+.debts__form-item input{
+  width: 100% !important;
+  margin-right: 0 !important;
 }
 .accountant__form-item label {
   display: block;
