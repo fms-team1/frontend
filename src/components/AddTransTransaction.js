@@ -117,7 +117,7 @@ export default function AddTransTransaction(props) {
                 </div>
                 {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
                 <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
-                <MessageBox variant="success">Успешно добавлен</MessageBox> : ''}
+                <MessageBox variant="success">Успешно переведено</MessageBox> : ''}
               </div>
             </form>
           </section>

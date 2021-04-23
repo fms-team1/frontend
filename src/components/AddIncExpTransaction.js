@@ -24,7 +24,7 @@ export default function AddIncExpTransaction(props) {
   const addTransaction = useSelector((state) => state.addTransaction);
   const { loadingAdd, errorAdd, messageAdd } = addTransaction;
 
-  const [date, setDate] = useState('_____');
+  const [date, setDate] = useState(new Date());
   const [wallet, setWallet] = useState(0);
   const [summa, setSumma] = useState(0);
   const [category, setCategory] = useState(0);

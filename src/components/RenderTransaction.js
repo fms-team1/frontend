@@ -43,7 +43,7 @@ export default function RenderTransaction(props) {
                             <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
                             }
                         </td>
-                        <td>{createdDate.slice(0, 10)}</td>
+                        <td>{createdDate ? createdDate.slice(0, 10) : "__________"}</td>
                     </tr>
                 )
             }) : null}
