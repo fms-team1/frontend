@@ -7,9 +7,9 @@ export default function RenderWallet(props) {
             <tr key={id}>
                 <td>{
                     id === 1 ? <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} /> :
-                    id === 5 ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
-                    id === 3 ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
-                    id === 2 ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
+                    id === 2 ? <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} /> :
+                    id === 4 ? <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} /> :
+                    id === 3 ? <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} /> :
                     <img src={`${process.env.PUBLIC_URL}/icons/cash.png`} />
                     }
                     <span>{walletName}</span>

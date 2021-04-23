@@ -52,19 +52,19 @@ export default function Dropdown({ state, setState, title, items, dropdownType }
                       <div>{item.name}</div>
                       {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
                     </> :
-                    item.id === 2 ?
+                    item.id === 3 ?
                     <>
                       <img src={`${process.env.PUBLIC_URL}/icons/demir.png`} />
                       <div>{item.name}</div>
                       {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
                     </> :
-                    item.id === 5 ?
+                    item.id === 2 ?
                     <>
                       <img src={`${process.env.PUBLIC_URL}/icons/okg.png`} />
                       <div>{item.name}</div>
                       {selected && <img src={`${process.env.PUBLIC_URL}/icons/selected.svg`} className="dropdown__list-selected"/>}
                     </> :
-                    item.id === 3 ?
+                    item.id === 4 ?
                     <>
                       <img src={`${process.env.PUBLIC_URL}/icons/elsom.png`} />
                       <div>{item.name}</div>

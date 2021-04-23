@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { addAccountantReducer, changePasswordReducer, getAllCounterpartiesReducer, getAllUsersReducer, getCurrentUserReducer, newCounterpartyReducer, userSigninReducer } from "./reducers/userReducers";
 import thunk from "redux-thunk";
-import { addNewTransactionReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
+import { addNewTransactionReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listDebtsReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
 
 const initialState = {
     userSignin: {
@@ -30,6 +30,7 @@ const reducer = combineReducers({
     allUsers: getAllUsersReducer,
     allCounterparties: getAllCounterpartiesReducer,
     walletList: getAllWalletReducer,
+    debtsList: listDebtsReducer,
     activeGroupList: getAllActiveGroupsReducer,
     analyticsData: getAnalyticsReducer
 })

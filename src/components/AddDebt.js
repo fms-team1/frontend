@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIncExpTransaction, getCategoriesByNeoSection, getNeoSections, getAllWallet, getAllCategory } from '../actions/transactionActions';
+import { getCategoriesByNeoSection, getNeoSections, getAllWallet, getAllCategory, addNewDebt } from '../actions/transactionActions';
 import './AddTransaction.css';
 import MessageBox from './MessageBox';
 import LoadingBox from './LoadingBox';
@@ -8,7 +8,7 @@ import { ADD_TRANSACTION_RESET } from '../constants/transactionConstants';
 import { getAllCounterparties } from '../actions/userActions';
 import SearchGetCounterparty from './SearchGetCounterparty';
 
-export default function AddIncExpTransaction(props) {
+export default function AddDebt(props) {
 
   const userSignin = useSelector((state) => state.userSignin);
   const { userInfo } = userSignin;
@@ -27,6 +27,8 @@ export default function AddIncExpTransaction(props) {
   const [date, setDate] = useState('_____');
   const [wallet, setWallet] = useState(0);
   const [summa, setSumma] = useState(0);
+  const [debt, setDebt] = useState(0);
+  const [paid, setPaid] = useState(0);
   const [category, setCategory] = useState(0);
   const [counterparty, setCounterparty] = useState('_____');
   const [comment, setComment] = useState('_____');
@@ -37,7 +39,7 @@ export default function AddIncExpTransaction(props) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(addIncExpTransaction(userInfo, +summa, +wallet, +category, comment, counterparty, date));
+    dispatch(addNewDebt(+summa, +debt, +paid, +wallet, +category, comment, counterparty, date));
   };
   const handleFocus = (inputType) => {
     setFocused(inputType);
@@ -47,29 +49,7 @@ export default function AddIncExpTransaction(props) {
   }
   const handleClose = () => {
     dispatch({ type: ADD_TRANSACTION_RESET });
-    props.history.push('/');
-  }
-
-  const getCategoryId = (e) => {
-    setCategory(e.target.value);
-  }
-  const getCounterparty = (e) => {
-    setCounterparty(e.target.value);
-  }
-  const getSumma = (e) => {
-    setSumma(e.target.value);
-  }
-  const getComment = (e) => {
-    setComment(e.target.value);
-  }
-  const getOrganization = (e) => {
-    dispatch(getCategoriesByNeoSection(userInfo, e.target.value));
-  }
-  const getDate = (e) => {
-    setDate(e.target.value);
-  }
-  const getWallet = (e) => {
-    setWallet(e.target.value);
+    props.history.push('/debts');
   }
 
   useEffect(() => {
@@ -83,9 +63,8 @@ export default function AddIncExpTransaction(props) {
         <div className="modal display-block">
           <section className="modal__main column__center">
             <img src={`${process.env.PUBLIC_URL}/icons/exit.svg`} onClick={handleClose} className="modal__exit" />
-            <form onSubmit={submitHandler} className="modal__main-form">
-              <div className="modal__top-form">
-                <div className="modal__form-item">
+            <form onSubmit={submitHandler} className="accountant__main-form">
+                <div className="accountant__form-item">
                   <label htmlFor="organization">Организация</label>
                   <select id="organization"
                   onFocus={() => handleFocus("organization")} onBlur={handleBlur}
@@ -94,21 +73,42 @@ export default function AddIncExpTransaction(props) {
                     ? '#1778E9' : '#848181'
                   }}
                   required
-                  onChange={(e) => getOrganization(e)}>
+                  onChange={(e) => dispatch(getCategoriesByNeoSection(userInfo, e.target.value))}>
                     <option value="">Выберите организацию</option>
                     {sections ? sections.map(({id, name}) => id !== 2 && <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
-                <div className="modal__form-item">
-                  <label htmlFor="date">Дата</label>
-                  <input type="date" id="date"
-                   onFocus={() => handleFocus("date")} onBlur={handleBlur}
+                <div className="accountant__form-item" onChange={(e) => setSumma(e.target.value)}>
+                  <label htmlFor="summa">Сумма к оплате</label>
+                  <input type="number" id="summa"
+                   onFocus={() => handleFocus("summa")} onBlur={handleBlur}
                    style={{
-                     borderColor: focused == "date"
+                     borderColor: focused == "summa"
                      ? '#1778E9' : '#848181'
-                   }} onChange={(e) => getDate(e)} />
+                   }}
+                   placeholder="Введите сумму к оплате" />
                 </div>
-                <div className="modal__form-item">
+                <div className="accountant__form-item debts__form-item" onChange={(e) => setPaid(e.target.value)}>
+                  <label htmlFor="paid">Оплачено</label>
+                  <input type="number" id="paid"
+                   onFocus={() => handleFocus("paid")} onBlur={handleBlur}
+                   style={{
+                     borderColor: focused == "paid"
+                     ? '#1778E9' : '#848181'
+                   }}
+                   placeholder="Введите сумму к оплате" />
+                </div>
+                <div className="accountant__form-item debts__form-item" onChange={(e) => setDebt(e.target.value)}>
+                  <label htmlFor="debt">Долг</label>
+                  <input type="number" id="debt"
+                   onFocus={() => handleFocus("debt")} onBlur={handleBlur}
+                   style={{
+                     borderColor: focused == "debt"
+                     ? '#1778E9' : '#848181'
+                   }}
+                   placeholder="0" />
+                </div>
+                <div className="accountant__form-item">
                   <label htmlFor="wallet">Кошелек</label>
                   <select id="wallet" placeholder="Выберите кошелек" required
                   onFocus={() => handleFocus("wallet")} onBlur={handleBlur}
@@ -116,23 +116,12 @@ export default function AddIncExpTransaction(props) {
                     borderColor: focused == "wallet"
                     ? '#1778E9' : '#848181'
                   }}
-                  onChange={(e) => getWallet(e)}>
+                  onChange={(e) => setWallet(e.target.value)}>
                     <option value="">Выберите кошелек</option>
                     {wallets ? wallets.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
-              </div>
-              <div className="modal__middle-form">
-                <div className="modal__form-item" onChange={(e) => getSumma(e)}>
-                  <label htmlFor="summa">Сумма</label>
-                  <input type="number" id="summa"
-                   onFocus={() => handleFocus("summa")} onBlur={handleBlur}
-                   style={{
-                     borderColor: focused == "summa"
-                     ? '#1778E9' : '#848181'
-                   }}placeholder="0" />
-                </div>
-                <div className="modal__form-item">
+                <div className="accountant__form-item">
                   <label htmlFor="category">Категория расхода</label>
                   <select name="category"
                   onFocus={() => handleFocus("category")} onBlur={handleBlur}
@@ -141,30 +130,29 @@ export default function AddIncExpTransaction(props) {
                     ? '#1778E9' : '#848181'
                   }}
                   required
-                  onChange={(e) => getCategoryId(e)}>
+                  onChange={(e) => setCategory(e.target.value)}>
                     <option value="">Выберите категорию</option>
                     {categories ? categories.map(({name, id}) => <option key={id} value={id}>{name}</option>) : null}
                   </select>
                 </div>
-                <div className="modal__form-item">
-                  {/* <SearchGetCounterparty
+                <div className="accountant__form-item">
+                  <SearchGetCounterparty
                     state={counterparty}
                     setState={setCounterparty}
                     title="Введите контрагент"
                     label="Контрагент"
-                    items={allCounterpartiesList} /> */}
-                  <label htmlFor="contragent">Контрагент</label>
-                  <input type="text" id="contragent"
-                  onFocus={() => handleFocus("counterPart")} onBlur={handleBlur}
-                  style={{
-                    borderColor: focused == "counterPart"
-                    ? '#1778E9' : '#848181'
-                  }}
-                  placeholder="Введите контрагент"  onChange={(e) => getCounterparty(e)}/>
+                    items={allCounterpartiesList} />
                 </div>
-              </div>
-              <div className="modal__bottom-form">
-                <div className="modal__form-item">
+                <div className="accountant__form-item">
+                    <label htmlFor="date">Дата</label>
+                    <input type="date" id="date"
+                    onFocus={() => handleFocus("date")} onBlur={handleBlur}
+                    style={{
+                      borderColor: focused == "date"
+                      ? '#1778E9' : '#848181'
+                    }} onChange={(e) => setDate(e.target.value)} />
+                </div>
+                <div className="accountant__form-item debts__form-item">
                   <label htmlFor="note">Примечание</label>
                   <textarea id="note" name="w3review"
                   onFocus={() => handleFocus("note")} onBlur={handleBlur}
@@ -172,15 +160,14 @@ export default function AddIncExpTransaction(props) {
                     borderColor: focused == "note"
                     ? '#1778E9' : '#848181'
                   }}
-                  rows="4" onChange={(e) => getComment(e)}></textarea>
+                  rows="4" onChange={(e) => setComment(e.target.value)}></textarea>
                 </div>
-                <div className="modal__form-item">
+              <div className="accountant__form-item">
                   <input type="submit" value="Добавить" />
                 </div>
                 {loadingAdd ? (<LoadingBox></LoadingBox>) : errorAdd ?
                 <MessageBox variant="danger">{errorAdd}</MessageBox> : messageAdd ?
                 <MessageBox variant="success">Успешно добавлен</MessageBox> : ''}
-              </div>
             </form>
           </section>
         </div>

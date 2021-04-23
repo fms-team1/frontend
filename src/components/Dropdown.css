@@ -42,6 +42,12 @@
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
 }
+.dropdown__add-header {
+    margin: 10px 0 13px 0;
+    width: 100%;
+    padding: 17px 18px;
+    font-size: 16px;
+}
 .dropdown__header-icon {
     margin-left: 20px;
     margin-right: 10px;
@@ -53,6 +59,10 @@
     background-color: #fff;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     padding: 14px 5px 10px 20px;
+}
+.dropdown__add-list {
+    top: 100%;
+    left: 0;
 }
 .dropdown__filter-list img {
     margin-right: 7%;
