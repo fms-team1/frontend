@@ -247,7 +247,7 @@ export const getAllCategory = (token) => async (dispatch) => {
         type: CATEGORY_LIST_REQUEST
     });
     try {
-        const { data } = await axios.get('https://neo-fms.herokuapp.com/category/getAll', {
+        const { data } = await axios.get('https://neo-fms.herokuapp.com/category/getAllActiveCategories', {
             headers: {
                 'Authorization': `Bearer ${token.jwt}`
             }
