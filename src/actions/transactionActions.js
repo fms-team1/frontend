@@ -7,7 +7,8 @@ import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS,
         TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS,
         WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS,
         FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, FILTER_LIST_FAIL,
-        CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, SECTION_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, GROUP_LIST_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_SUCCESS, ADD_ACCOUNTANT_FAIL, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAIL, TRANSACTION_TYPES_REQUEST, TRANSACTION_TYPES_SUCCESS, TRANSACTION_TYPES_FAIL, ANALYTICS_REQUEST, ANALYTICS_SUCCESS, ANALYTICS_FAIL, DEBTS_LIST_REQUEST, DEBTS_LIST_SUCCESS, DEBTS_LIST_FAIL, ADD_DEBT_REQUEST, ADD_DEBT_FAIL } from '../constants/transactionConstants';
+        CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, SECTION_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, GROUP_LIST_FAIL, ADD_ACCOUNTANT_REQUEST, ADD_ACCOUNTANT_SUCCESS, ADD_ACCOUNTANT_FAIL, CHANGE_PASSWORD_REQUEST, CHANGE_PASSWORD_SUCCESS, CHANGE_PASSWORD_FAIL, TRANSACTION_TYPES_REQUEST, TRANSACTION_TYPES_SUCCESS, TRANSACTION_TYPES_FAIL, ANALYTICS_REQUEST, ANALYTICS_SUCCESS, ANALYTICS_FAIL, DEBTS_LIST_REQUEST, DEBTS_LIST_SUCCESS, DEBTS_LIST_FAIL, ADD_DEBT_REQUEST, ADD_DEBT_FAIL, ADD_DEBT_SUCCESS, GET_DEBT_REQUEST, GET_DEBT_FAIL, GET_DEBT_SUCCESS, EDIT_DEBT_SUCCESS, EDIT_DEBT_FAIL, EDIT_DEBT_REQUEST, DELETE_DEBT_REQUEST, DELETE_DEBT_SUCCESS, DELETE_DEBT_FAIL } from '../constants/transactionConstants';
+import { GET_ALL_USERS_SUCCESS } from '../constants/userConstants';
 
 
 export const listLastTransactions = (token) => async (dispatch) => {
@@ -41,6 +42,42 @@ export const listDebts = () => async (dispatch, getState) => {
         dispatch({ type: DEBTS_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: DEBTS_LIST_FAIL, payload: error.message });
+    }
+}
+export const deleteDebt = (id) => async (dispatch, getState) => {
+    dispatch({
+        type: DELETE_DEBT_REQUEST
+    });
+    const {
+        userSignin: { userInfo },
+    } = getState();
+    try {
+        const { data } = await axios.delete(`https://neo-fms.herokuapp.com/debts/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: DELETE_DEBT_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: DELETE_DEBT_FAIL, payload: error.message });
+    }
+}
+export const getDebt = (id) => async (dispatch, getState) => {
+    dispatch({
+        type: GET_DEBT_REQUEST
+    });
+    const {
+        userSignin: { userInfo },
+    } = getState();
+    try {
+        const { data } = await axios.get(`https://neo-fms.herokuapp.com/debts/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: GET_DEBT_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: GET_DEBT_FAIL, payload: error.message });
     }
 }
 export const getCategoriesByNeoSection = (token, neoSection) => async (dispatch) => {
@@ -100,13 +137,16 @@ export const addIncExpTransaction = (token, summa, wallet, category, comment, co
                 'Authorization': `Bearer ${token.jwt}`
             }
         });
-        console.log(data);
         dispatch({ type: ADD_TRANSACTION_SUCCESS, payload: data });
+        localStorage.setItem('transactionDebts', JSON.stringify({
+            transactionId: data.id,
+            amount: data.amount
+        }));
     } catch (error) {
         dispatch({ type: ADD_TRANSACTION_FAIL, payload: error.message });
     }
 }
-export const addNewDebt = (summa, debt, paid, wallet, category, comment, counterparty, date) => async (dispatch, getState) => {
+export const addNewDebt = (summa, debt, paid, transactionId) => async (dispatch, getState) => {
     dispatch({
         type: ADD_DEBT_REQUEST
     });
@@ -116,20 +156,44 @@ export const addNewDebt = (summa, debt, paid, wallet, category, comment, counter
     try {
         const { data } = await axios.post('https://neo-fms.herokuapp.com/debts',
         {
-            // amount: summa,
-            // debtStatusId: true,
-            // owe: debt,
-            // paid: paid,
-            // transactionId: 0
+            owe: debt,
+            paid: paid,
+            toBePaid: summa,
+            transactionId: transactionId
         },
         {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }
         });
-        dispatch({ type: ADD_DEBT_REQUEST, payload: data });
+        dispatch({ type: ADD_DEBT_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: ADD_DEBT_FAIL, payload: error.message });
+    }
+}
+export const editDebt = (summa, debt, paid, debtId, transactionId) => async (dispatch, getState) => {
+    dispatch({
+        type: EDIT_DEBT_REQUEST
+    });
+    const {
+        userSignin: { userInfo },
+    } = getState();
+    try {
+        const { data } = await axios.put(`https://neo-fms.herokuapp.com/debts/${debtId}`,
+        {
+            owe: debt,
+            paid: paid,
+            toBePaid: summa,
+            transactionId: transactionId
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${userInfo.jwt}`
+            }
+        });
+        dispatch({ type: EDIT_DEBT_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: EDIT_DEBT_FAIL, payload: error.message });
     }
 }
 export const listPeriodTransactions = (period) => async (dispatch, getState) => {

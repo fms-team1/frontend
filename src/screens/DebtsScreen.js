@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { listDebts } from '../actions/transactionActions';
-import RenderTransaction from '../components/RenderTransaction';
-import RenderAdaptiveTransaction from '../components/RenderAdaptiveTransaction';
+import { deleteDebt, listDebts } from '../actions/transactionActions';
 import { signout } from '../actions/userActions';
 import { Link } from 'react-router-dom';
+import RenderDebtTransaction from '../components/RenderDebtTransaction';
 
 export default function DebtsScreen(props) {
     const dispatch = useDispatch();
@@ -17,24 +16,21 @@ export default function DebtsScreen(props) {
     const transactionDebtsList = useSelector((state) => state.debtsList);
     const { loading, error, transactions } = transactionDebtsList;
 
-    const [media, setMedia] = useState(false);
+    const deletedDebt = useSelector((state) => state.deleteDebt);
+    const { loadingDelete, errorDelete, messageDelete } = deletedDebt;
 
+    const onHandleDelete = (id) => {
+        let answer = window.confirm("Вы уверены, что удалите?");
+        if(answer) {
+            dispatch(deleteDebt(id));
+        }
+    }
     useEffect(() => {
-        if(window.matchMedia("(max-width: 620px)").matches) {
-            setMedia(true);
+        if(messageDelete === "") {
+            dispatch(listDebts());
         }
-        else {
-            setMedia(false);
-        }
+    }, [messageDelete]);
 
-        window.matchMedia("(max-width: 620px)").addEventListener("change", () => {
-            if(window.matchMedia("(max-width: 620px)").matches) {
-                setMedia(true);
-            }
-            else setMedia(false);
-        });
-
-    }, [window.matchMedia("(max-width: 620px)").matches]);
 
     useEffect(() => {
         if(error && error.indexOf("403") !== -1) {
@@ -46,37 +42,28 @@ export default function DebtsScreen(props) {
         else {
             dispatch(listDebts());
         }
-    }, [error]);
+    }, []);
 
     return (
         <section className="home">
+            <div className="transaction__block">
+                <div className="transaction__top-block">
+                    <div className="transaction__title-block debt__title-block">Последние долги</div>
+                    <div className="debt__content-buttons column__flex-end">
+                        <Link to='/addDebt'>
+                            <img src={`${process.env.PUBLIC_URL}/icons/add__debt.svg`} />
+                            <div>Добавить долг</div>
+                        </Link>
+                    </div>
+                </div>
                 {loading ? (
                     <LoadingBox></LoadingBox>
-                ) : error ? (
+                        ) : error ? (
                     <MessageBox varinat="danger">{error}</MessageBox>
-                ) : (
-                    <>
-                    <div className="transaction__block">
-                        <div className="transaction__top-block">
-                            <div className="transaction__title-block">Последние долги</div>
-                            <div className="debt__content-buttons column__space-between">
-                                <Link to='/addDebt'>
-                                    <img src={`${process.env.PUBLIC_URL}/icons/add__debt.svg`} />
-                                    <div>Добавить долг</div>
-                                </Link>
-                                <Link to='/addDebt'>
-                                    <img src={`${process.env.PUBLIC_URL}/icons/add__left_debt.svg`} /> 
-                                    <div>Погасить долг</div>
-                                </Link>
-                            </div>
-                        </div>
-                        {media ? 
-                        (<>
-                            <RenderAdaptiveTransaction  transactions={transactions} />
-                        </>) : <RenderTransaction transactions={transactions} />}
-                    </div>    
-                </>
-                )}
+                        ) : (
+                            <RenderDebtTransaction transactions={transactions} onHandleDelete={onHandleDelete} />
+                            )}
+            </div>
         </section>
     )
 }

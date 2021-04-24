@@ -2,9 +2,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width:100%;
+  width:100% !important;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.6) !important;
   z-index: 10;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -108,10 +108,10 @@
   color: #4C4C4C;
 }
 .display-block {
-  display: block;
+  display: block !important;
 } 
 .display-none {
-  display: none;
+  display: none !important;
 }
 
 /* Add accountant */
@@ -123,7 +123,7 @@
   flex-wrap: wrap;
 }
 .accountant__form-item {
-  width: 300px;
+  width: 300px !important;
   position: relative;
 }
 .accountant__main-form input,
@@ -185,6 +185,7 @@
   margin-right: 0 !important;
 }
 .accountant__form-item label {
+  text-align: left;
   display: block;
   font-weight: 500;
   font-size: 14px;

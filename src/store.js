@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { addAccountantReducer, changePasswordReducer, getAllCounterpartiesReducer, getAllUsersReducer, getCurrentUserReducer, newCounterpartyReducer, userSigninReducer } from "./reducers/userReducers";
 import thunk from "redux-thunk";
-import { addNewTransactionReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listDebtsReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
+import { addNewDebtReducer, addNewTransactionReducer, deleteDebtReducer, editDebtReducer, getAllActiveGroupsReducer, getAllCategoryReducer, getAllWalletReducer, getAnalyticsReducer, getCategoriesByNeoSectionReducer, getCategoryListReducer, getDebtReducer, getFilterListReducer, getJournalListReducer, getNeoSectionsReducer, getTransactionReducer, lastListTransactionReducer, listDebtsReducer, listPeriodTransactionsReducer } from "./reducers/transactionReducers";
 
 const initialState = {
     userSignin: {
@@ -22,6 +22,10 @@ const reducer = combineReducers({
     sectionList: getNeoSectionsReducer,
     filterList: getFilterListReducer,
     addTransaction: addNewTransactionReducer,
+    addNewDebt: addNewDebtReducer,
+    getDebt: getDebtReducer,
+    editDebt: editDebtReducer,
+    deleteDebt: deleteDebtReducer,
     addAccountant: addAccountantReducer,
     registerCounterparty: newCounterpartyReducer,
     transactionTypesList: getTransactionReducer,
