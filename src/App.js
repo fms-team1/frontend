@@ -16,6 +16,7 @@ import ChangePassword from './components/ChangePassword';
 import BurgerMenu from './components/BurgerMenu';
 import AddDebt from './components/AddDebt';
 import DebtsScreen from './screens/DebtsScreen';
+import EditDebt from './components/EditDebt';
 
 function App() {
   const userSignin = useSelector((state) => state.userSignin);
@@ -41,6 +42,7 @@ function App() {
         <Route path="/addAccountant" component={AddAccountant}></Route>
         <Route path="/addTransaction" component={AddIncExpTransaction}></Route>
         <Route path="/addDebt" component={AddDebt}></Route>
+        <Route path="/editDebt/:id" component={EditDebt}></Route>
         <Route path="/addTransferTransaction" component={AddTransTransaction}></Route>
         <Route path="/changePassword" component={ChangePassword}></Route>
 

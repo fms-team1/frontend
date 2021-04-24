@@ -1,4 +1,4 @@
-import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, FILTER_LIST_FAIL, FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, GROUP_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, SECTION_LIST_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS, ADD_TRANSACTION_RESET, TRANSACTION_TYPES_REQUEST, TRANSACTION_TYPES_SUCCESS, TRANSACTION_TYPES_FAIL, ANALYTICS_REQUEST, ANALYTICS_SUCCESS, ANALYTICS_FAIL, DEBTS_LIST_REQUEST, DEBTS_LIST_SUCCESS, DEBTS_LIST_FAIL } from "../constants/transactionConstants";
+import { ADD_TRANSACTION_FAIL, ADD_TRANSACTION_REQUEST, ADD_TRANSACTION_SUCCESS, CATEGORIES_BY_SECTION_FAIL, CATEGORIES_BY_SECTION_REQUEST, CATEGORIES_BY_SECTION_SUCCESS, CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, FILTER_LIST_FAIL, FILTER_LIST_REQUEST, FILTER_LIST_SUCCESS, GROUP_LIST_FAIL, GROUP_LIST_REQUEST, GROUP_LIST_SUCCESS, JOURNAL_BY_SECTION_FAIL, JOURNAL_BY_SECTION_REQUEST, JOURNAL_BY_SECTION_SUCCESS, JOURNAL_LIST_FAIL, JOURNAL_LIST_REQUEST, JOURNAL_LIST_SUCCESS, SECTION_LIST_FAIL, SECTION_LIST_REQUEST, SECTION_LIST_SUCCESS, TRANSACTION_LAST_LIST_FAIL, TRANSACTION_LAST_LIST_REQUEST, TRANSACTION_LAST_LIST_SUCCESS, TRANSACTION_PERIOD_LIST_FAIL, TRANSACTION_PERIOD_LIST_REQUEST, TRANSACTION_PERIOD_LIST_SUCCESS, WALLET_LIST_FAIL, WALLET_LIST_REQUEST, WALLET_LIST_SUCCESS, ADD_TRANSACTION_RESET, TRANSACTION_TYPES_REQUEST, TRANSACTION_TYPES_SUCCESS, TRANSACTION_TYPES_FAIL, ANALYTICS_REQUEST, ANALYTICS_SUCCESS, ANALYTICS_FAIL, DEBTS_LIST_REQUEST, DEBTS_LIST_SUCCESS, DEBTS_LIST_FAIL, ADD_DEBT_RESET, ADD_DEBT_REQUEST, ADD_DEBT_SUCCESS, ADD_DEBT_FAIL, GET_DEBT_REQUEST, GET_DEBT_SUCCESS, GET_DEBT_FAIL, EDIT_DEBT_REQUEST, EDIT_DEBT_SUCCESS, EDIT_DEBT_FAIL, EDIT_DEBT_RESET, DELETE_DEBT_REQUEST, DELETE_DEBT_SUCCESS, DELETE_DEBT_FAIL, DELETE_DEBT_RESET } from "../constants/transactionConstants";
 
 export const lastListTransactionReducer = (
     state = { loading: true, transactions: [] },
@@ -225,6 +225,72 @@ export const addNewTransactionReducer = ( state = {}, action ) => {
         case ADD_TRANSACTION_FAIL:
             return { loadingAdd: false, errorAdd: action.payload };
         case ADD_TRANSACTION_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const editDebtReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case EDIT_DEBT_REQUEST:
+            return { loadingEdit: true };
+        case EDIT_DEBT_SUCCESS:
+            return {
+                loadingEdit: false,
+                messageEdit: action.payload
+            };
+        case EDIT_DEBT_FAIL:
+            return { loadingEdit: false, errorAdd: action.payload };
+        case EDIT_DEBT_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const deleteDebtReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case DELETE_DEBT_REQUEST:
+            return { loadingDelete: true };
+        case DELETE_DEBT_SUCCESS:
+            return {
+                loadingDelete: false,
+                messageDelete: action.payload
+            };
+        case DELETE_DEBT_FAIL:
+            return { loadingDelete: false, errorAdd: action.payload };
+        case DELETE_DEBT_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const getDebtReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case GET_DEBT_REQUEST:
+            return { loading: true };
+        case GET_DEBT_SUCCESS:
+            return {
+                loading: false,
+                message: action.payload
+            };
+        case GET_DEBT_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+export const addNewDebtReducer = ( state = {}, action ) => {
+    switch (action.type) {
+        case ADD_DEBT_REQUEST:
+            return { loadingAdd: true };
+        case ADD_DEBT_SUCCESS:
+            return {
+                loadingAdd: false,
+                messageAdd: action.payload
+            };
+        case ADD_DEBT_FAIL:
+            return { loadingAdd: false, errorAdd: action.payload };
+        case ADD_DEBT_RESET:
             return {};
         default:
             return state;
