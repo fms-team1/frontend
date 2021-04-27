@@ -23,7 +23,7 @@ export default function RenderAdaptiveTransaction(props) {
                         {transactionTypeId === 0 ? '+' + amount + ' c' :
                         transactionTypeId === 1 ? '-' + amount + ' c' : amount + ' c'}
                 </div>
-                <div>{createdDate.slice(0, 10)}</div>
+                <div>{createdDate && createdDate.slice(0, 10)}</div>
             </div>)
             }) : null
 }
